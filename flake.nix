@@ -14,6 +14,7 @@
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     stylix.url = "github:danth/stylix";
+    nixcord.url = "github:kaylorben/nixcord";
     # SecondFront Modules and Projects
     secondfront.url = "github:tonybutt/modules";
     twofctl = {
@@ -40,6 +41,7 @@
       nixos-hardware,
       secondfront,
       twofctl,
+      nixcord,
       ...
     }@inputs:
     let
@@ -93,6 +95,7 @@
           modules = [
             ./home/home.nix
             stylix.homeManagerModules.stylix
+            nixcord.homeModules.nixcord
             secondfront.homeManagerModules.secondfront
           ];
         };

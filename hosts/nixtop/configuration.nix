@@ -8,6 +8,11 @@
     ./disko-config.nix
   ];
 
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 21 80 443 5900 ];
+  };
+
   modules = {
     hostName = "nixtop";
     peripherals = {

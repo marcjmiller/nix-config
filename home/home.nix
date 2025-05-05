@@ -13,23 +13,62 @@
       refreshRate = 60;
     }
   ];
+
   home.packages = with pkgs; [
-    twofctl
+    go
+    openssl
     pulumi-bin
+    stern
+    twofctl
+    typescript
     wayvnc
+    pcsc-tools
+    (pkgs.writeShellScriptBin "setup-browser-CAC" ''
+      NSSDB="''${HOME}/.pki/nssdb"
+      mkdir -p ''${NSSDB}
+
+      ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add yubi-smartcard \
+        -libfile ${pkgs.opensc}/lib/opensc-pkcs11.so
+    '')
   ];
+
+  stylix = {
+    enable = true;
+    cursor = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 24;
+    };
+  };
 
   programs = {
     # Add packages from home Manager that you want
-    # nixcord.enable = true;
-    # nixcord.vesktop.enable = true;
-    # obs-studio.enable = true;
+    nixcord.enable = true;
+    nixcord.vesktop.enable = true;
+    obs-studio.enable = true;
+    chromium = {
+      enable = true;
+      package = pkgs.brave;
+      extensions = [
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
+        { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
+        { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
+        { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
+        { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
+      ];
+    };
     # foot.enable = true;
+    zsh = {
+      sessionVariables.EDITOR = "vim";
+    };
   };
+
   wayland.windowManager.hyprland = {
     settings = {
       exec-once = [
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
+        "wayvnc 0.0.0.0"
       ];
       bind = [
         "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
@@ -92,6 +131,7 @@
         "$mainMod, B, exec, pkill -SIGUSR1 waybar"
         "$mainMod, W, exec, pkill -SIGUSR2 waybar"
       ];
+
       bindm = [
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"

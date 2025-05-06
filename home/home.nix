@@ -71,21 +71,15 @@
     ];
   };
 
-  programs.zed-editor.userSettings.relative_line_numbers = lib.mkForce false;
-
-  # programs.zed-editor.userSettings = {
-  #   auto_update = false;
-  #   relative_line_numbers = lib.mkForce false;
-  #   tab_size = 2;
-  #   terminal = {
-  #     env = {
-  #       EDITOR = "zed --wait";
-  #       TERM = "kitty";
-  #     };
-  #     copy_on_select = true;
-  #     font_family = "FiraCode Nerd Font Mono"
-  #   };
-  # };
+  programs.zed-editor = {
+    userSettings = {
+      relative_line_numbers = lib.mkForce false;
+      tab_size = lib.mkForce 2;
+      # terminal = {
+      #   copy_on_select = lib.mkForce true;
+      # };
+    };
+  };
 
   wayland.windowManager.hyprland = {
     settings = {

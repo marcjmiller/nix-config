@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
@@ -46,23 +47,45 @@
     nixcord.enable = true;
     nixcord.vesktop.enable = true;
     obs-studio.enable = true;
-    chromium = {
-      enable = true;
-      package = pkgs.brave;
-      extensions = [
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
-        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
-        { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
-        { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
-        { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
-        { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
-      ];
-    };
     # foot.enable = true;
-    zsh = {
-      sessionVariables.EDITOR = "vim";
-    };
   };
+
+  programs.zsh = {
+    sessionVariables.EDITOR = "vim";
+    sessionVariables.BROWSER = "brave";
+  };
+
+  programs.chromium = {
+    enable = true;
+    package = pkgs.brave;
+    extensions = [
+      { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
+      { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
+      { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
+      { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
+      { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
+    ];
+    commandLineArgs = [
+      "--disable-features=AutofillSavePaymentMethods"
+    ];
+  };
+
+  programs.zed-editor.userSettings.relative_line_numbers = lib.mkForce false;
+
+  # programs.zed-editor.userSettings = {
+  #   auto_update = false;
+  #   relative_line_numbers = lib.mkForce false;
+  #   tab_size = 2;
+  #   terminal = {
+  #     env = {
+  #       EDITOR = "zed --wait";
+  #       TERM = "kitty";
+  #     };
+  #     copy_on_select = true;
+  #     font_family = "FiraCode Nerd Font Mono"
+  #   };
+  # };
 
   wayland.windowManager.hyprland = {
     settings = {

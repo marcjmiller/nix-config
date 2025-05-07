@@ -50,9 +50,9 @@
     # foot.enable = true;
   };
 
-  programs.zsh = {
-    sessionVariables.EDITOR = "vim";
-    sessionVariables.BROWSER = "brave";
+  programs.kitty.settings = {
+    copy_on_select = "yes";
+    scrollback_lines = 10000;
   };
 
   programs.chromium = {
@@ -69,16 +69,6 @@
     commandLineArgs = [
       "--disable-features=AutofillSavePaymentMethods"
     ];
-  };
-
-  programs.zed-editor = {
-    userSettings = {
-      relative_line_numbers = lib.mkForce false;
-      tab_size = lib.mkForce 2;
-      # terminal = {
-      #   copy_on_select = lib.mkForce true;
-      # };
-    };
   };
 
   wayland.windowManager.hyprland = {

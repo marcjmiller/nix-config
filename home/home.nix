@@ -4,6 +4,10 @@
   ...
 }:
 {
+  imports = [
+    ./zsh.nix
+  ];
+
   secondfront.hyprland.monitors = [
     # Setup your monitors
     {
@@ -17,6 +21,7 @@
 
   home.packages = with pkgs; [
     go
+    nodejs_24
     openssl
     pulumi-bin
     stern
@@ -44,31 +49,36 @@
 
   programs = {
     # Add packages from home Manager that you want
-    nixcord.enable = true;
-    nixcord.vesktop.enable = true;
+    # nixcord.enable = true;
+    # nixcord.vesktop.enable = true;
     obs-studio.enable = true;
     # foot.enable = true;
-  };
 
-  programs.kitty.settings = {
-    copy_on_select = "yes";
-    scrollback_lines = 10000;
-  };
+    kitty.settings = {
+      copy_on_select = "yes";
+      scrollback_lines = 10000;
+    };
 
-  programs.chromium = {
-    enable = true;
-    package = pkgs.brave;
-    extensions = [
-      { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
-      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
-      { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
-      { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
-      { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
-      { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
-    ];
-    commandLineArgs = [
-      "--disable-features=AutofillSavePaymentMethods"
-    ];
+    chromium = {
+      enable = true;
+      package = pkgs.brave;
+      extensions = [
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
+        { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
+        { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
+        { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
+        { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
+      ];
+      commandLineArgs = [
+        "--disable-features=AutofillSavePaymentMethods"
+      ];
+    };
+
+    zed-editor.userSettings = {
+      relative_line_numbers = lib.mkForce false;
+      tab_size = 2;
+    };
   };
 
   wayland.windowManager.hyprland = {

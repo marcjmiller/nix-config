@@ -21,8 +21,10 @@
 
   home.packages = with pkgs; [
     go
+    mysql80
     nodejs_24
     openssl
+    pgloader
     pulumi-bin
     stern
     twofctl

@@ -15,7 +15,7 @@
       extip = "curl icanhazip.com/v4";
       kcu = "2fctl kubeconfig update";
       gcat = "git commit --all --template ~/.gitmessage";
-      gwup = "cd ~/workspace/govcloud && 2fctl git clone";
+      gwup = "pushd ~/workspace/govcloud && 2fctl git clone && popd";
     };
   };
 }

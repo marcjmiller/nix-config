@@ -24,12 +24,12 @@
     mysql80
     nodejs_24
     openssl
-    pgloader
     pulumi-bin
     stern
     twofctl
     typescript
     wayvnc
+    yq-go
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''
       NSSDB="''${HOME}/.pki/nssdb"
@@ -56,9 +56,13 @@
     obs-studio.enable = true;
     # foot.enable = true;
 
-    kitty.settings = {
-      copy_on_select = "yes";
-      scrollback_lines = 10000;
+    kitty = {
+      settings = {
+        copy_on_select = "yes";
+        scrollback_lines = 10000;
+      };
+      themeFile = "Catppuccin-Mocha";
+      extraConfig = lib.mkForce "";
     };
 
     chromium = {

@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./firefox.nix
     ./zsh.nix
   ];
 
@@ -21,7 +22,7 @@
 
   home.packages = with pkgs; [
     go
-    mysql80
+    httpie
     nodejs_24
     openssl
     pulumi-bin
@@ -51,10 +52,7 @@
 
   programs = {
     # Add packages from home Manager that you want
-    # nixcord.enable = true;
-    # nixcord.vesktop.enable = true;
     obs-studio.enable = true;
-    # foot.enable = true;
 
     kitty = {
       settings = {
@@ -81,9 +79,23 @@
       ];
     };
 
-    zed-editor.userSettings = {
-      relative_line_numbers = lib.mkForce false;
-      tab_size = 2;
+    zed-editor = {
+      userSettings = {
+        relative_line_numbers = lib.mkForce false;
+        tab_size = 2;
+        theme = lib.mkForce "Base16 Catppuccin Mocha";
+        icon_theme = "Catppuccin Mocha";
+      };
+
+      extensions = lib.mkForce [
+        "nix"
+        "catppuccin"
+        "catppuccin-icons"
+        "toml"
+        "docker"
+        "docker compose"
+        "git firefly"
+      ];
     };
   };
 

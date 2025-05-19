@@ -11,7 +11,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    nur.url = "github:nix-community/NUR";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     stylix.url = "github:danth/stylix";
     nixcord.url = "github:kaylorben/nixcord";
@@ -39,6 +39,7 @@
       hyprland,
       disko,
       nixos-hardware,
+      nur,
       secondfront,
       twofctl,
       nixcord,
@@ -49,7 +50,10 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ twofctl.overlays.default ];
+        overlays = [
+          twofctl.overlays.default
+          nur.overlays.default
+        ];
       };
       user = {
         name = "marcmiller";

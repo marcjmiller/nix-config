@@ -12,6 +12,8 @@
           {
             "${darkreader.addonId}" = "${darkreader.src.url}";
             "${bitwarden.addonId}" = "${bitwarden.src.url}";
+            "${tampermonkey.addonId}" = "${tampermonkey.src.url}";
+            "${stylus.addonId}" = "${stylus.src.url}";
           };
       profiles.marcmiller = {
         search = {

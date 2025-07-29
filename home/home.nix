@@ -43,9 +43,9 @@
     '')
   ];
 
-  home.file = {
-    ".config/tampermonkey-scripts/aws-auto-accept.user.js".source =
-      ./scripts/tampermonkey/aws-auto-accept.user.js;
+  home.file.".config/scripts" = {
+    source = ./scripts;
+    recursive = true;
   };
 
   stylix = {

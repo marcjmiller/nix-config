@@ -43,6 +43,11 @@
     '')
   ];
 
+  home.file = {
+    ".config/tampermonkey-scripts/aws-auto-accept.user.js".source =
+      ./scripts/tampermonkey/aws-auto-accept.user.js;
+  };
+
   stylix = {
     enable = true;
     cursor = {

@@ -19,5 +19,11 @@
       gwup = "pushd ~/workspace/govcloud && find . -type d -name .git -exec dirname {} \\; | xargs -P10 -n1 -I{} bash -c 'output=\$(git -C {} pull --quiet 2>&1); status=\$?; if [ \$status -eq 0 ]; then echo \"🔄 Pulling {} ... ✅\"; else echo \"🔄 Pulling {} ... ❌\"; echo \"[\$(date)] {}: \$output\" >> ~/gwup-failures.txt; fi' && popd";
       watch = "watch ";
     };
+
+    initExtra = ''
+      2f() {
+        AWS_USE_FIPS_ENDPOINT=false 2fctl login -a $1 -r $2 && source ~/.config/2fctl/credentials.sh
+      }
+    '';
   };
 }

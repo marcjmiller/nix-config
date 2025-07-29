@@ -20,7 +20,7 @@
       watch = "watch ";
     };
 
-    initExtra = ''
+    initContent = ''
       2f() {
         AWS_USE_FIPS_ENDPOINT=false 2fctl login -a $1 -r $2 && source ~/.config/2fctl/credentials.sh
       }

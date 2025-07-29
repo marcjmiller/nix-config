@@ -7,7 +7,6 @@
   imports = [
     ./firefox.nix
     ./hyprland.nix
-    ./waybar.nix
     ./zed.nix
     ./zsh.nix
   ];

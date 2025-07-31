@@ -92,10 +92,14 @@
     };
 
     opacity = {
-      terminal = lib.mkForce 0.92;
-      desktop = lib.mkForce 0.92;
-      popups = lib.mkForce 0.92;
+      terminal = lib.mkForce 0.9;
+      desktop = lib.mkForce 0.9;
+      popups = lib.mkForce 0.9;
     };
+
+    targets.fuzzel.enable = true;
+    targets.k9s.enable = true;
+    targets.kitty.enable = true;
   };
 
   programs = {
@@ -107,7 +111,6 @@
         copy_on_select = "yes";
         scrollback_lines = 10000;
       };
-      themeFile = "Catppuccin-Mocha";
     };
 
     chromium = {
@@ -124,6 +127,18 @@
       commandLineArgs = [
         "--disable-features=AutofillSavePaymentMethods"
       ];
+    };
+
+    fuzzel = {
+      enable = true;
+      settings = {
+        main = {
+          prompt = "\"󰍉 \"";
+        };
+        border = {
+          radius = 8;
+        };
+      };
     };
 
     tealdeer = {

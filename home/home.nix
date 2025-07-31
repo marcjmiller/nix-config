@@ -60,6 +60,9 @@
   ];
 
   home.file = {
+    ".gitmessage" = {
+      source = ./files/gitmessage;
+    };
     ".config/scripts" = {
       source = ./files/scripts;
       recursive = true;

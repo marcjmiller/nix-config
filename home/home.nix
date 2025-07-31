@@ -33,6 +33,8 @@
   home.packages = with pkgs; [
     bluez
     bluez-tools
+    eza
+    fzf
     gimp
     go
     httpie
@@ -42,6 +44,7 @@
     psmisc
     pulumi-bin
     stern
+    thefuck
     twofctl
     typescript
     wayvnc

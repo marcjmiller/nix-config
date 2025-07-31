@@ -33,6 +33,7 @@
   home.packages = with pkgs; [
     bluez
     bluez-tools
+    dive
     eza
     fzf
     gimp
@@ -43,8 +44,8 @@
     openssl
     psmisc
     pulumi-bin
+    sops
     stern
-    thefuck
     twofctl
     typescript
     wayvnc
@@ -107,7 +108,6 @@
         scrollback_lines = 10000;
       };
       themeFile = "Catppuccin-Mocha";
-      extraConfig = lib.mkForce "";
     };
 
     chromium = {

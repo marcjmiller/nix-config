@@ -46,7 +46,6 @@
         "helm"
         "httpie"
         "kubectl"
-        "thefuck"
         "z"
       ];
     };

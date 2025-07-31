@@ -1,17 +1,178 @@
 {
-  lib,
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
   inherit (import ../variables.nix)
     betterTransition
+    terminal
     ;
 in
 with lib;
 {
   programs.waybar = lib.mkForce {
     enable = true;
+
+    systemd.enable = true;
+    settings = {
+      mainBar = {
+        layer = "top";
+        position = "top";
+        modules-left = [
+          "custom/launcher"
+          "idle_inhibitor"
+          "hyprland/window"
+        ];
+        modules-center = [
+          "hyprland/workspaces"
+        ];
+        modules-right = [
+          "tray"
+          "group/hardware"
+          "clock"
+          "custom/exit"
+        ];
+        network = {
+          interval = 1;
+          format-disconnected = "Disconnected :warning:";
+          format-ethernet = "";
+          format-linked = "{ifname} (No IP) ";
+          format-wifi = "{essid} ";
+          on-click = "${terminal} --class dropdown -e ${pkgs.networkmanager}/bin/nmtui";
+        };
+        pulseaudio = {
+          scroll-step = 1;
+          format = "{volume}% {icon}";
+          format-bluetooth = "{volume}% {icon}";
+          format-muted = "";
+          format-icons = {
+            headphones = "";
+            handsfree = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = [
+              ""
+              ""
+            ];
+          };
+          on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
+        };
+        "custom/launcher" = {
+          format = "";
+          icon-size = 24;
+          on-click = "fuzzel";
+          tooltip = false;
+        };
+        "hyprland/workspaces" = {
+          show-special = true;
+          format = "{name}";
+          format-icons = {
+            default = " ";
+            active = " ";
+            urgent = " ";
+          };
+          on-scroll-up = "hyprctl dispatch workspace e+1";
+          on-scroll-down = "hyprctl dispatch workspace e-1";
+        };
+        "hyprland/window" = {
+          format = "{class}";
+          max-length = 20;
+          separate-outputs = false;
+          rewrite = {
+            "" = "No Windows?";
+          };
+        };
+        "group/hardware" = {
+          orientation = "horizontal";
+          modules = [
+            "battery"
+            "cpu"
+            "memory"
+            "network"
+            "pulseaudio"
+          ];
+          drawer = {
+            transition-duration = 500;
+          };
+        };
+        "memory" = {
+          tooltip = true;
+        };
+        "idle_inhibitor" = {
+          format = "{icon}";
+          format-icons = {
+            activated = "";
+            deactivated = "";
+          };
+          tooltip = "true";
+        };
+        "tray" = {
+          spacing = 12;
+        };
+        "custom/exit" = {
+          tooltip = false;
+          format = "";
+          on-click = "sleep 0.1 && wlogout";
+        };
+        "clock" = {
+          format = " {:L%I:%M %p %Z}";
+          timezones = [
+            "America/New_York"
+            "Etc/UTC"
+          ];
+          tooltip-format = "<tt>{calendar}</tt>";
+          calendar = {
+            mode = "month";
+            on-scroll = 1;
+            format = {
+              today = "<span color='#47FF51'><b><u>{}</u></b></span>";
+            };
+          };
+          actions = {
+            on-click-right = "tz_up";
+          };
+        };
+        "battery" = {
+          bat = "BAT0";
+          interval = 60;
+          states = {
+            "warning" = 30;
+            "critical" = 1;
+          };
+          format = "{icon} {capacity}%";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+          max-length = 25;
+        };
+        "cpu" = {
+          interval = 1;
+          format = "{icon} {usage}%";
+          format-icons = [
+            "<span color='#69ff94'>▁</span>" # green
+            "<span color='#2aa9ff'>▂</span>" # blue
+            "<span color='#f8f8f2'>▃</span>" # white
+            "<span color='#f8f8f2'>▄</span>" # white
+            "<span color='#ffffa5'>▅</span>" # yellow
+            "<span color='#ffffa5'>▆</span>" # yellow
+            "<span color='#ff9977'>▇</span>" # orange
+            "<span color='#dd532e'>█</span>" # red
+          ];
+        };
+        "memory" = {
+          interval = 30;
+          format = "{used:0.1f}G/{total:0.1f}G ";
+        };
+      };
+    };
 
     style = concatStrings [
       ''
@@ -69,45 +230,47 @@ with lib;
         tooltip label {
           color: #${config.lib.stylix.colors.base08};
         }
-        #window, #pulseaudio, #cpu, #memory, #idle_inhibitor {
+        #window {
           font-weight: bold;
-          margin: 4px 0px;
-          margin-left: 7px;
+          margin: 8px 0;
           padding: 0px 18px;
           background: #${config.lib.stylix.colors.base00};
           color: #${config.lib.stylix.colors.base08};
           border-radius: 8px 8px 8px 8px;
         }
-        #idle_inhibitor {
-        font-size: 28px;
+        #battery, #pulseaudio, #cpu, #memory,
+        #network, #idle_inhibitor, #clock,
+        #tray, #custom-exit {
+          font-weight: bold;
+          margin: 8px 7px 8px 0;
+          padding: 0px 18px;
+          background: #${config.lib.stylix.colors.base00};
+          color: #${config.lib.stylix.colors.base08};
+          border-radius: 8px 8px 8px 8px;
         }
-        #custom-os_button {
-          color: #${config.lib.stylix.colors.base0B};
+        #custom-launcher, #custom-exit {
+          color: #${config.lib.stylix.colors.base00};
           background: #${config.lib.stylix.colors.base02};
-          font-size: 22px;
+          font-size: 28px;
           margin: 8px;
           padding: 0px 10px;
           border-radius: 16px 16px 16px 16px;
         }
-        #custom-hyprbindings, #network, #battery,
-        #custom-notification, #tray, #custom-exit {
-          /* font-weight: bold; */
+        #custom-exit {
+          font-size: 20px;
+          padding: 0px 10px;
+          border-radius: 16px;
+        }
+        #tray {
           font-size: 20px;
           background: #${config.lib.stylix.colors.base00};
           color: #${config.lib.stylix.colors.base08};
-          margin: 4px 0px;
-          margin-right: 7px;
           border-radius: 8px 8px 8px 8px;
           padding: 0px 18px;
         }
         #clock {
-          font-weight: bold;
-          font-size: 16px;
-          color: #0D0E15;
+          color: #${config.lib.stylix.colors.base00};
           background: linear-gradient(90deg, #${config.lib.stylix.colors.base0B}, #${config.lib.stylix.colors.base02});
-          margin: 0px;
-          padding: 0px 5px 0px 5px;
-          border-radius: 16px 16px 16px 16px;
         }
       ''
     ];

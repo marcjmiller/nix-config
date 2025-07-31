@@ -21,6 +21,13 @@
       width = 1920;
       refreshRate = 60;
     }
+    {
+      name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M28U 22100B010513";
+      width = 3840;
+      height = 2160;
+      refreshRate = 144;
+      position = "auto-left";
+    }
   ];
 
   home.packages = with pkgs; [
@@ -32,6 +39,7 @@
     networkmanagerapplet
     nodejs_24
     openssl
+    psmisc
     pulumi-bin
     stern
     twofctl
@@ -73,9 +81,9 @@
     };
 
     opacity = {
-      terminal = lib.mkForce 0.9;
-      desktop = lib.mkForce 0.9;
-      popups = lib.mkForce 0.9;
+      terminal = lib.mkForce 0.92;
+      desktop = lib.mkForce 0.92;
+      popups = lib.mkForce 0.92;
     };
   };
 

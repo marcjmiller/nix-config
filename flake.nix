@@ -99,7 +99,6 @@
           modules = [
             ./home/home.nix
             stylix.homeManagerModules.stylix
-            nixcord.homeModules.nixcord
             secondfront.homeManagerModules.secondfront
           ];
         };

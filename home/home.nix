@@ -6,7 +6,8 @@
 {
   imports = [
     ./firefox.nix
-    ./hyprland.nix
+    ./hyprland
+    ./waybar
     ./zed.nix
     ./zsh.nix
   ];
@@ -23,8 +24,12 @@
   ];
 
   home.packages = with pkgs; [
+    bluez
+    bluez-tools
+    gimp
     go
     httpie
+    networkmanagerapplet
     nodejs_24
     openssl
     pulumi-bin
@@ -43,17 +48,34 @@
     '')
   ];
 
-  home.file.".config/scripts" = {
-    source = ./scripts;
-    recursive = true;
+  home.file = {
+    ".config/scripts" = {
+      source = ./files/scripts;
+      recursive = true;
+    };
+    "Pictures/Wallpapers" = {
+      source = ./files/wallpapers;
+      recursive = true;
+    };
   };
+
+  secondfront.themes.enable = false;
 
   stylix = {
     enable = true;
+    image = lib.mkForce ./files/wallpapers/rainnight.jpg;
+    polarity = "dark";
+
     cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
       size = 24;
+    };
+
+    opacity = {
+      terminal = lib.mkForce 0.9;
+      desktop = lib.mkForce 0.9;
+      popups = lib.mkForce 0.9;
     };
   };
 
@@ -94,5 +116,15 @@
         updates.auto_update = true;
       };
     };
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings.preload = [
+      "~/Pictures/Wallpapers/rainnight.jpg"
+    ];
+    settings.wallpaper = [
+      ",~/Pictures/Wallpapers/rainnight.jpg"
+    ];
   };
 }

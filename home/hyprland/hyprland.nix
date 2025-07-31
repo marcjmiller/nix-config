@@ -50,7 +50,7 @@
           height = 16;
           render_titles = true;
           scrolling = true;
-          text_color = "";
+          text_color = "rgba(000000dd)";
           indicator_height = 0;
           gradients = true;
 

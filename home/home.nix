@@ -65,6 +65,10 @@
       source = ./files/wallpapers;
       recursive = true;
     };
+    "Pictures/OBS" = {
+      source = ./files/obs;
+      recursive = true;
+    };
   };
 
   secondfront.themes.enable = false;

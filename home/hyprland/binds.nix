@@ -11,6 +11,10 @@ in
       "$mainMod, C, workspace, name:chat"
       "$mainMod, D, workspace, name:code"
 
+      # Move windows to named workspaces
+      "$mainMod SHIFT, C, movetoworkspace, name:chat"
+      "$mainMod SHIFT, D, movetoworkspace, name:code"
+
       "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
       "$mainMod, G, togglegroup"
       "$mainMod, Return, exec, ${terminal}"

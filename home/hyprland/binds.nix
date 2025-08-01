@@ -7,6 +7,10 @@ in
 {
   wayland.windowManager.hyprland.settings = {
     bind = [
+      # Named workspace navigation
+      "$mainMod, C, workspace, name:chat"
+      "$mainMod, D, workspace, name:code"
+
       "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
       "$mainMod, G, togglegroup"
       "$mainMod, Return, exec, ${terminal}"

@@ -6,6 +6,9 @@
 let
   base00 = "#${config.lib.stylix.colors.base00}";
   base08 = "#${config.lib.stylix.colors.base08}";
+  inherit (import ../variables.nix)
+    mainMonitor
+    ;
 in
 {
   wayland.windowManager.hyprland = {
@@ -22,11 +25,29 @@ in
         resize_on_border = true;
       };
 
+      workspace = [
+        "name:chat, monitor:${mainMonitor}"
+        "name:code, monitor:${mainMonitor}"
+      ];
+
       layerrule = [
         "blur,waybar"
         "blur,group"
         "blur,launcher"
         "ignorealpha 0.5, launcher"
+      ];
+
+      windowrulev2 = [
+        # Chat applications
+        "workspace name:chat, class:^(discord)$"
+        "workspace name:chat, class:^(Discord)$"
+        "workspace name:chat, class:^(Slack)$"
+        "workspace name:chat, class:^(slack)$"
+
+        # Code applications
+        "workspace name:code, class:^(code)$"
+        "workspace name:code, class:^(Code)$"
+        "workspace name:code, class:^(zed)$"
       ];
 
       decoration = {
@@ -61,7 +82,15 @@ in
 
       exec-once = [
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
-        "wayvnc 0.0.0.0 -o DP-2"
+        "wayvnc 0.0.0.0 -o ${mainMonitor}"
+
+        # Start chat apps on chat workspace
+        "[workspace name:chat silent] discord"
+        "[workspace name:chat silent] slack"
+
+        # Start code editor on code workspace
+        "[workspace name:code silent] zed"
+        "[workspace name:code silent] kitty"
       ];
 
     };

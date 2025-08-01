@@ -1,11 +1,14 @@
 {
-  pkgs,
+  config,
   lib,
+  pkgs,
   ...
 }:
 let
+  braveThemePath = "${config.home.homeDirectory}/.local/share/brave-theme";
   inherit (import ./variables.nix)
     desktopImage
+    mainMonitor
     ;
 in
 with lib;
@@ -28,7 +31,7 @@ with lib;
       refreshRate = 60;
     }
     {
-      name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M28U 22100B010513";
+      name = mainMonitor;
       width = 3840;
       height = 2160;
       refreshRate = 144;
@@ -108,6 +111,13 @@ with lib;
     targets.kitty.enable = true;
   };
 
+  home.activation.generateBraveTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ -f ~/.config/stylix/generated.json ]; then
+      echo "🔧 Generating Brave theme from Stylix..."
+      # ${pkgs.bash}/bin/bash ~/.config/scripts/brave/gen-brave-theme.sh
+    fi
+  '';
+
   programs = {
     # Add packages from home Manager that you want
     obs-studio.enable = true;
@@ -129,9 +139,18 @@ with lib;
         { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
         { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
         { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
+        { id = "cigimgkncpailblodniinggablglmebn"; } # Stylix-generated Theme
       ];
       commandLineArgs = [
-        "--disable-features=AutofillSavePaymentMethods"
+        "--load-extensions=${braveThemePath}"
+        "--force-dark-mode"
+        "--enable-features=WebUIDarkMode"
+        "--disable-features=AutofillSavePaymentMethods,AutofillCreditCardAuthentication,AutofillCreditCardUpload"
+        "--disable-features=AutofillSaveCardDialog,AutofillEnableAccountWalletStorage,AutofillCreditCardDownstream"
+        "--password-store=basic"
+        "--disable-save-password-bubble"
+        "--disable-autofill-keyboard-accessory-view"
+        "--wallet-service-use-sandbox"
       ];
     };
 

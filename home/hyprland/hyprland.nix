@@ -1,7 +1,12 @@
 {
+  config,
   lib,
   ...
 }:
+let
+  base00 = "#${config.lib.stylix.colors.base00}";
+  base08 = "#${config.lib.stylix.colors.base08}";
+in
 {
   wayland.windowManager.hyprland = {
     settings = {
@@ -34,12 +39,6 @@
       };
 
       group = lib.mkForce {
-        # Group bar styling (higher opacity for bright wallpaper)
-        "col.border_active" = "rgba(ffffffff)"; # White border for active
-        "col.border_inactive" = "rgba(3a3a3c80)"; # Your waybar color at 50% opacity
-        "col.border_locked_active" = "rgba(f53c3cff)"; # Red for locked (matches your battery critical)
-        "col.border_locked_inactive" = "rgba(3a3a3c60)";
-
         groupbar = {
           enabled = true;
           font_size = 16;
@@ -49,14 +48,14 @@
           height = 20;
           render_titles = true;
           scrolling = true;
-          text_color = "rgba(000000dd)";
+          text_color = builtins.replaceStrings [ "#" ] [ "rgba(" ] base08 + "ee)";
           indicator_height = 0;
           gradients = true;
 
-          "col.active" = "rgba(ffffffcc)"; # White, 80% opacity
-          "col.inactive" = "rgba(ffffff33)"; # White, 20% opacity
-          "col.locked_active" = "rgba(f53c3ccc)";
-          "col.locked_inactive" = "rgba(ffffff40)";
+          "col.active" = builtins.replaceStrings [ "#" ] [ "rgba(" ] base00 + "dd)";
+          "col.inactive" = builtins.replaceStrings [ "#" ] [ "rgba(" ] base00 + "55)";
+          "col.locked_active" = builtins.replaceStrings [ "#" ] [ "rgba(" ] base00 + "dd)";
+          "col.locked_inactive" = builtins.replaceStrings [ "#" ] [ "rgba(" ] base00 + "55)";
         };
       };
 

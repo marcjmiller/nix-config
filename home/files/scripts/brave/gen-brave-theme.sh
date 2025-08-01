@@ -68,7 +68,7 @@ cat > "$manifest" <<EOF
 EOF
 
 # Calculate and display the extension ID
-extension_id=$(openssl rsa -in "$key_file" -pubout -outform DER 2>/dev/null | shasum -a 256 | head -c32 | tr '0-9a-f' 'a-p')
+extension_id=$(openssl rsa -in "$key_file" -pubout -outform DER 2>/dev/null | sha256sum | head -c32 | tr '0-9a-f' 'a-p')
 echo "Brave theme generated at: $theme_dir"
 echo "Extension ID: $extension_id"
 echo "Add this ID to your Nix config: \"$extension_id\""

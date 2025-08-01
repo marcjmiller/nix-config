@@ -9,7 +9,8 @@
       jplenio = "pexels-jplenio.jpg";
       therato = "pexels-therato.jpg";
       blackhole = "supermassive-black-hole.jpg";
+      astronaut = "astronaut.jpg";
     }
-    .blackhole;
+    .astronaut;
 
 }

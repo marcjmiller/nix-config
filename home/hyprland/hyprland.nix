@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   ...
 }:
@@ -43,11 +42,11 @@
 
         groupbar = {
           enabled = true;
-          font_size = 12;
+          font_size = 16;
           font_family = "JetBrainsMono Nerd Font Mono";
           font_weight_inactive = "Normal";
           font_weight_active = "Bold";
-          height = 16;
+          height = 20;
           render_titles = true;
           scrolling = true;
           text_color = "rgba(000000dd)";

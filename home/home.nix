@@ -3,6 +3,12 @@
   lib,
   ...
 }:
+let
+  inherit (import ./variables.nix)
+    desktopImage
+    ;
+in
+with lib;
 {
   imports = [
     ./firefox.nix
@@ -82,7 +88,7 @@
 
   stylix = {
     enable = true;
-    image = lib.mkForce ./files/wallpapers/rainnight.jpg;
+    image = lib.mkForce ./files/wallpapers/${desktopImage};
     polarity = "dark";
 
     cursor = {
@@ -154,10 +160,10 @@
   services.hyprpaper = {
     enable = true;
     settings.preload = [
-      "~/Pictures/Wallpapers/rainnight.jpg"
+      "~/Pictures/Wallpapers/${desktopImage}"
     ];
     settings.wallpaper = [
-      ",~/Pictures/Wallpapers/rainnight.jpg"
+      ",~/Pictures/Wallpapers/${desktopImage}"
     ];
   };
 }

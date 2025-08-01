@@ -192,6 +192,7 @@ with lib;
           margin: 4px 4px;
           padding: 5px 5px;
           border-radius: 16px;
+          font-size: 16px;
         }
         #workspaces button {
           font-weight: bold;
@@ -202,6 +203,7 @@ with lib;
           background: linear-gradient(45deg, #${config.lib.stylix.colors.base08}, #${config.lib.stylix.colors.base0D});
           opacity: 0.5;
           transition: ${betterTransition};
+          min-width: 25px;
         }
         #workspaces button.active {
           font-weight: bold;

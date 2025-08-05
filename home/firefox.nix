@@ -2,19 +2,22 @@
 {
   programs = {
     firefox = {
-      policies.ExtensionSettings =
-        with pkgs.nur.repos.rycee.firefox-addons;
-        builtins.mapAttrs
-          (_: install_url: {
-            installation_mode = "force_installed";
-            inherit install_url;
-          })
-          {
-            "${darkreader.addonId}" = "${darkreader.src.url}";
-            "${bitwarden.addonId}" = "${bitwarden.src.url}";
-            "${tampermonkey.addonId}" = "${tampermonkey.src.url}";
-            "${stylus.addonId}" = "${stylus.src.url}";
-          };
+      policies = {
+
+        ExtensionSettings =
+          with pkgs.nur.repos.rycee.firefox-addons;
+          builtins.mapAttrs
+            (_: install_url: {
+              installation_mode = "force_installed";
+              inherit install_url;
+            })
+            {
+              "${darkreader.addonId}" = "${darkreader.src.url}";
+              "${bitwarden.addonId}" = "${bitwarden.src.url}";
+              "${tampermonkey.addonId}" = "${tampermonkey.src.url}";
+              "${stylus.addonId}" = "${stylus.src.url}";
+            };
+      };
       profiles.marcmiller = {
         search = {
           force = true;

@@ -60,5 +60,8 @@ in
     disko
     vim
     git
+    usbutils
   ];
+
+  services.udisks2.enable = true;
 }

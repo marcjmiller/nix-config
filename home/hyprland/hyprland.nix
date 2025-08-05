@@ -14,7 +14,7 @@ in
   wayland.windowManager.hyprland = {
     settings = {
       input = {
-        repeat_delay = 150;
+        repeat_delay = 200;
         repeat_rate = 75;
       };
 
@@ -82,7 +82,7 @@ in
 
       exec-once = [
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
-        "wayvnc 0.0.0.0 -o ${mainMonitor}"
+        "udiskie"
 
         # Start chat apps on chat workspace
         "[workspace name:chat silent] discord"

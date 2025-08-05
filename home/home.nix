@@ -40,6 +40,8 @@ with lib;
   ];
 
   home.packages = with pkgs; [
+    appimage-run
+    bat
     bluez
     bluez-tools
     dive
@@ -57,7 +59,10 @@ with lib;
     stern
     twofctl
     typescript
+    usbutils
+    vial
     wayvnc
+    yazi
     yq-go
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''
@@ -121,6 +126,11 @@ with lib;
   programs = {
     # Add packages from home Manager that you want
     obs-studio.enable = true;
+    # appimage = {
+    #   enable = true;
+    #   binfmt = true;
+    #   package = pkgs.appimage-run;
+    # };
 
     kitty = {
       settings = {
@@ -142,7 +152,6 @@ with lib;
         { id = "cigimgkncpailblodniinggablglmebn"; } # Stylix-generated Theme
       ];
       commandLineArgs = [
-        "--load-extensions=${braveThemePath}"
         "--force-dark-mode"
         "--enable-features=WebUIDarkMode"
         "--disable-features=AutofillSavePaymentMethods,AutofillCreditCardAuthentication,AutofillCreditCardUpload"
@@ -176,13 +185,17 @@ with lib;
     };
   };
 
-  services.hyprpaper = {
-    enable = true;
-    settings.preload = [
-      "~/Pictures/Wallpapers/${desktopImage}"
-    ];
-    settings.wallpaper = [
-      ",~/Pictures/Wallpapers/${desktopImage}"
-    ];
+  services = {
+    hyprpaper = {
+      enable = true;
+      settings.preload = [
+        "~/Pictures/Wallpapers/${desktopImage}"
+      ];
+      settings.wallpaper = [
+        ",~/Pictures/Wallpapers/${desktopImage}"
+      ];
+    };
+
+    udiskie.enable = true;
   };
 }

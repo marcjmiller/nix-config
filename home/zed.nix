@@ -18,8 +18,11 @@
         light = "Catppuccin Latte";
       };
       icon_theme = "Catppuccin Mocha";
+      autosave = lib.mkForce  {
+        after_delay.milliseconds = 2000;
+      };
+      vim_mode = lib.mkForce false;
     };
-
     extensions = lib.mkForce [
       "nix"
       "catppuccin"

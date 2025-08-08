@@ -14,6 +14,7 @@ mkdir -p "$theme_dir"
 if [ ! -f "$key_file" ]; then
     openssl genrsa -out "$key_file" 2048 2>/dev/null
 fi
+KEY_B64="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwAfQo/36RKUth3MV9kaUyrKA5h/dR1ZTrzw3ZY3JXZPbQeSdlRepkWrVdEiHZ+HbDiXLCjdUx5u/gK2oUoeceeOHgGPF/S5lbW95sFarCsRbE3T6NhNDu/JHptMZxlas4/i6O5Lca1zlEKWNzDE1TQtokCZBemRlLFyp0IqLqqT1hRiTDhtU7UjhMS+4emItmTNMStEMfiTe7YrX5ZjERY+fD4p7ibGrKcllBxZt8WK8b5Vfmf6InKjlIa8pL4tNeU60D3Ke/GeM2QED1v544idjLA0bWDp0atcWb9GcFP7JP5mBaMlSqoltXSKoHxjUQyj2YlElvj8h0xYh+5Lw8FQIDAQAB"
 
 # Function to convert hex to RGB array
 hex_to_rgb() {
@@ -45,7 +46,7 @@ cat > "$manifest" <<EOF
   "name": "Stylix Brave Theme",
   "version": "1.0",
   "description": "Auto-generated theme from Stylix colors",
-  "key": "$(openssl rsa -in "$key_file" -pubout -outform DER 2>/dev/null | base64 -w 0)",
+  "key": "${KEY_B64}",
   "theme": {
     "colors": {
       "frame": $BG,

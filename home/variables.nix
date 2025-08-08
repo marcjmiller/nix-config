@@ -3,7 +3,7 @@
   betterTransition = "all 0.3s cubic-bezier(.55,-0.68,.48,1.682)";
 
   # Monitors
-  laptopMonitor = "eDP-1";
+  laptopMonitor = "desc:Sharp Corporation 0x1515";
   mainMonitor = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M28U 22100B010513";
 
   # Defaults/common use apps

@@ -59,6 +59,7 @@
       homecfg = "zed ~/nix-config";
       kcu = "2fctl kubeconfig update";
       pp = "pulumi";
+      ppss = "pulumi stack select";
       rl = "source ~/.zshrc";
       shell = "nix develop -c $SHELL";
       watch = "watch ";

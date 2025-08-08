@@ -50,15 +50,19 @@ with lib;
     gimp
     go
     httpie
+    httpie-desktop
     networkmanagerapplet
     nodejs_24
+    noto-fonts
     openssl
+    papirus-icon-theme
     psmisc
     pulumi-bin
     sops
     stern
     twofctl
     typescript
+    unzip
     usbutils
     vial
     wayvnc
@@ -194,6 +198,35 @@ with lib;
       settings.wallpaper = [
         ",~/Pictures/Wallpapers/${desktopImage}"
       ];
+    };
+
+    kanshi = {
+      enable = true;
+      profiles = {
+        undocked = {
+          outputs = [
+            {
+              criteria = "eDP-1";
+              status = "enable";
+              position = "0,0";
+              mode = "1920x1200";
+            }
+          ];
+        };
+        home_office = {
+          outputs = [
+            {
+              criteria = "eDP-1";
+              status = "disable";
+            }
+            {
+              criteria = "DP-2";
+              position = "0,0";
+              mode = "3840x2160@144";
+            }
+          ];
+        };
+      };
     };
 
     udiskie.enable = true;

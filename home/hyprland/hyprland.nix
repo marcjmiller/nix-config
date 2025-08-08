@@ -7,12 +7,18 @@ let
   base00 = "#${config.lib.stylix.colors.base00}";
   base08 = "#${config.lib.stylix.colors.base08}";
   inherit (import ../variables.nix)
+    laptopMonitor
     mainMonitor
     ;
 in
 {
   wayland.windowManager.hyprland = {
     settings = {
+      env = [
+          "XDG_CURRENT_DESKTOP,Hyprland"
+          "XDG_SESSION_TYPE,wayland"
+          "XDG_SESSION_DESKTOP,Hyprland"
+        ];
       input = {
         repeat_delay = 200;
         repeat_rate = 75;
@@ -27,7 +33,12 @@ in
 
       workspace = [
         "name:chat, monitor:${mainMonitor}"
-        "name:code, monitor:${mainMonitor}"
+        "name:dev, monitor:${mainMonitor}"
+        "name:1, monitor:${mainMonitor}"
+        "name:2, monitor:${mainMonitor}"
+        "name:3, monitor:${mainMonitor}"
+        "name:lp, monitor:${laptopMonitor}"
+        "name:obs, monitor:${mainMonitor}"
       ];
 
       layerrule = [
@@ -38,16 +49,16 @@ in
       ];
 
       windowrulev2 = [
-        # Chat applications
-        "workspace name:chat, class:^(discord)$"
-        "workspace name:chat, class:^(Discord)$"
-        "workspace name:chat, class:^(Slack)$"
-        "workspace name:chat, class:^(slack)$"
+        # Chat
+        "workspace chat, class:^(?i)discord$"
+        "workspace chat, class:^(?i)slack$"
 
-        # Code applications
-        "workspace name:code, class:^(code)$"
-        "workspace name:code, class:^(Code)$"
-        "workspace name:code, class:^(zed)$"
+        # Dev
+        "workspace dev, class:^(?i)code$"
+        "workspace dev, class:^(?i)dev\.zed\.zed$"
+        
+        # OBS
+        "workspace obs, class:^(?i)com\.obsproject\.studio"
       ];
 
       decoration = {
@@ -85,12 +96,15 @@ in
         "udiskie"
 
         # Start chat apps on chat workspace
-        "[workspace name:chat silent] discord"
-        "[workspace name:chat silent] slack"
+        "[workspace chat silent] discord"
+        "[workspace chat silent] slack"
 
         # Start code editor on code workspace
-        "[workspace name:code silent] zed"
-        "[workspace name:code silent] kitty"
+        "[workspace dev silent] zed"
+        "[workspace dev silent] kitty"
+        
+        # Start OBS on obs workspace
+        "[workspace obs silent] obs-studio"
       ];
 
     };

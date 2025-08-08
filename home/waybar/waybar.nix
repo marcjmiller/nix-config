@@ -81,10 +81,10 @@ with lib;
             "1" = [ ];
             "2" = [ ];
             "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
-            "code" = [ ];
             "chat" = [ ];
+            "dev" = [ ];
+            "lp"= [ ];
+            "obs" = [ ];
           };
         };
         "hyprland/window" = {
@@ -121,6 +121,7 @@ with lib;
         };
         "tray" = {
           spacing = 12;
+          icon-theme = "Papirus";
         };
         "custom/exit" = {
           tooltip = false;

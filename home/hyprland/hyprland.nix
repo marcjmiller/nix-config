@@ -23,7 +23,7 @@ in
         repeat_delay = 200;
         repeat_rate = 75;
         touchpad = {
-          natural_scroll = true;
+          natural_scroll = lib.mkForce true;
           disable_while_typing = true;
           clickfinger_behavior = true;
         };
@@ -111,14 +111,13 @@ in
 
         # Start OBS on obs workspace
         "[workspace obs silent] obs-studio"
-      ];
+      ];:
 
       # Monitor configuration events
-      bindl = [
-        ",monitoradded,*,~/.config/scripts/hypr/toggle-touchpad.sh"
-        ",monitorremoved,*,~/.config/scripts/hypr/toggle-touchpad.sh"
-      ];
-
+      # bindl = [
+      #   ",monitoradded,*,~/.config/scripts/hypr/toggle-touchpad.sh"
+      #   ",monitorremoved,*,~/.config/scripts/hypr/toggle-touchpad.sh"
+      # ];
     };
   };
 }

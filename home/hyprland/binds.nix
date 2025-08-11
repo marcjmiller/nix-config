@@ -15,7 +15,7 @@ in
       # Move windows to named workspaces
       "$mainMod SHIFT, C, movetoworkspace, name:chat"
       "$mainMod SHIFT, D, movetoworkspace, name:dev"
-      "$mainMod SHIFT, O, movetoworkspace, name:obs"      
+      "$mainMod SHIFT, O, movetoworkspace, name:obs"
 
       "$mainMod, E, exec, thunar"
       "$mainMod, F, togglefloating,"
@@ -62,6 +62,7 @@ in
       '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
       "$mainMod, B, exec, pkill -SIGUSR1 waybar"
       "$mainMod, W, exec, pkill -SIGUSR2 waybar"
+      "$mainMod, T, exec, ~/.config/scripts/hypr/toggle-touchpad.sh"
     ];
 
     bindm = [

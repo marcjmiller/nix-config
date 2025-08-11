@@ -40,6 +40,7 @@ with lib;
   ];
 
   home.packages = with pkgs; [
+    age
     appimage-run
     bat
     bluez
@@ -51,6 +52,7 @@ with lib;
     go
     httpie
     httpie-desktop
+    libnotify
     networkmanagerapplet
     nodejs_24
     noto-fonts

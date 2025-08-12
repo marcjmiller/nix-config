@@ -19,6 +19,6 @@
       blackhole = "supermassive-black-hole.jpg";
       astronaut = "astronaut.jpg";
     }
-    .jplenio;
+    .therato;
 
 }

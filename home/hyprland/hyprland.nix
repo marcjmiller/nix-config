@@ -111,7 +111,7 @@ in
 
         # Start OBS on obs workspace
         "[workspace obs silent] obs-studio"
-      ];:
+      ];
 
       # Monitor configuration events
       # bindl = [

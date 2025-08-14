@@ -80,7 +80,9 @@ current_stored=$(yq -r '.current_ip' "$IP_FILE")
 # ------------------------
 # 5️⃣ HANDLE IP CHANGE & REPORT
 # ------------------------
+ip_changed=false
 if [[ "$fetched_ip" != "$current_stored" ]]; then
+    ip_changed=true
     warn "Detected new public IP: $fetched_ip"
     warn "Previously stored IP:  $current_stored"
 
@@ -103,35 +105,49 @@ if [[ "$fetched_ip" != "$current_stored" ]]; then
     else
         info "No old IPs will be removed from publicAccessCidrs."
     fi
+else
+    info "IP unchanged: $fetched_ip"
+fi
 
-    if ! $AUTO_YES; then
+# ------------------------
+# 6️⃣ CONFIRMATION PROMPT (now outside IP change detection)
+# ------------------------
+if ! $AUTO_YES; then
+    if $ip_changed; then
         read -rp "Update stored IP and push to AWS? [Y/n]: " confirm < /dev/tty
-        confirm=${confirm:-Y}
-        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-            info "Aborting by user request."
-            exit 0
-        fi
+    else
+        read -rp "No IP change detected. Still update AWS publicAccessCidrs? [Y/n]: " confirm < /dev/tty
     fi
-
-    if ! $DRY_RUN; then
-        # Add old IP to old_ips if valid
-        if [[ -n "$current_stored" && "$current_stored" != "null" ]]; then
-            old_count=$(yq eval '.old_ips | length' "$IP_FILE")
-            if (( old_count > MAX_OLD_IPS )); then
-                yq -i '.old_ips = (.old_ips | .[-'"$MAX_OLD_IPS"':])' "$IP_FILE"
-            fi
-        fi
-
-        # Update current_ip
-        yq -i '.current_ip = "'"$fetched_ip"'"' "$IP_FILE"
-
-        # Prune old_ips to last MAX_OLD_IPS
-        yq -i '.old_ips |= (.[-'"$MAX_OLD_IPS"':])' "$IP_FILE"
+    confirm=${confirm:-Y}
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        info "Aborting by user request."
+        exit 0
     fi
 fi
 
 # ------------------------
-# 6️⃣ BUILD /32 CIDRS
+# 7️⃣ UPDATE IP FILE (only if IP changed)
+# ------------------------
+if $ip_changed && ! $DRY_RUN; then
+    # Add old IP to old_ips if valid
+    if [[ -n "$current_stored" && "$current_stored" != "null" ]]; then
+        yq -i '.old_ips += ["'"$current_stored"'"]' "$IP_FILE"
+    fi
+
+    # Update current_ip
+    yq -i '.current_ip = "'"$fetched_ip"'"' "$IP_FILE"
+
+    # Prune old_ips to keep only last MAX_OLD_IPS (only if we have more than MAX_OLD_IPS)
+    old_count=$(yq eval '.old_ips | length' "$IP_FILE")
+    if (( old_count > MAX_OLD_IPS )); then
+        # Calculate how many to keep from the end
+        keep_count=$MAX_OLD_IPS
+        yq -i '.old_ips = (.old_ips | .[-'"$keep_count"':])' "$IP_FILE"
+    fi
+fi
+
+# ------------------------
+# 8️⃣ BUILD /32 CIDRS
 # ------------------------
 current_ip_cidr="$fetched_ip/32"
 old_ips_cidr=$(yq -r '.old_ips[]?' "$IP_FILE" | sed 's/$/\/32/')
@@ -141,13 +157,13 @@ info "Current IP CIDR: $current_ip_cidr"
 info "Removing old IPs: $(echo "$old_ips_cidr" | tr '\n' ' ')"
 
 # ------------------------
-# 7️⃣ FETCH CURRENT CIDRS
+# 9️⃣ FETCH CURRENT CIDRS
 # ------------------------
 current_cidrs=$(aws eks describe-cluster --name "$cluster_name" \
     --query "cluster.resourcesVpcConfig.publicAccessCidrs" --output json)
 
 # ------------------------
-# 8️⃣ REMOVE OLD IPS
+# 🔟 REMOVE OLD IPS
 # ------------------------
 cleaned_cidrs="$current_cidrs"
 for old in $old_ips_cidr; do
@@ -163,26 +179,29 @@ if [[ $removed_count -eq 0 && $(echo "$current_cidrs" | jq length) -ge 40 ]]; th
 fi
 
 # ------------------------
-# 9️⃣ ADD CURRENT IP
+# 1️⃣1️⃣ ADD CURRENT IP
 # ------------------------
 updated_cidrs=$(echo "$cleaned_cidrs" | jq --arg ip "$current_ip_cidr" '
     if index($ip) == null then . + [$ip] else . end
 ')
 
 # ------------------------
-# 🔟 APPLY OR DRY-RUN
+# 1️⃣2️⃣ APPLY OR DRY-RUN
 # ------------------------
 if $DRY_RUN; then
     debug "DRY-RUN MODE: The following publicAccessCidrs would be applied:"
     echo "$updated_cidrs" | jq .
 else
+    info "Applying the following publicAccessCidrs:"
+    echo "$updated_cidrs" | jq .
+    
     if aws eks update-cluster-config \
         --name "$cluster_name" \
         --resources-vpc-config publicAccessCidrs="$updated_cidrs" \
-        --no-cli-pager >/dev/null 2>&1; then
+        --no-cli-pager; then
         info "👍 EKS publicAccessCidrs updated successfully."
     else
-        error "Failed to update EKS publicAccessCidrs. See AWS CLI output above."
+        error "Failed to update EKS publicAccessCidrs."
         exit 1
     fi
 fi

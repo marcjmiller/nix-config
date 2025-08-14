@@ -205,31 +205,37 @@ with lib;
 
     kanshi = {
       enable = true;
-      profiles = {
-        undocked = {
-          outputs = [
-            {
-              criteria = "eDP-1";
-              status = "enable";
-              position = "0,0";
-              mode = "1920x1200";
-            }
-          ];
-        };
-        home_office = {
-          outputs = [
-            {
-              criteria = "eDP-1";
-              status = "disable";
-            }
-            {
-              criteria = "DP-2";
-              position = "0,0";
-              mode = "3840x2160@144";
-            }
-          ];
-        };
-      };
+      settings = [
+        {
+          profile = {
+            name = "default";
+            outputs = [
+              {
+                criteria = "eDP-1";
+                status = "enable";
+                position = "0,0";
+                mode = "1920x1200";
+              }
+            ];
+          };
+        }
+        {
+          profile = {
+            name = "home_office";
+            outputs = [
+              {
+                criteria = "eDP-1";
+                status = "disable";
+              }
+              {
+                criteria = "DP-2";
+                position = "0,0";
+                mode = "3840x2160@144";
+              }
+            ];
+          };
+        }
+      ];
     };
 
     udiskie.enable = true;

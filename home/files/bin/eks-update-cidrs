@@ -105,7 +105,7 @@ if [[ "$fetched_ip" != "$current_stored" ]]; then
     fi
 
     if ! $AUTO_YES; then
-        read -rp "Update stored IP and push to AWS? [Y/n]: " confirm
+        read -rp "Update stored IP and push to AWS? [Y/n]: " confirm < /dev/tty
         confirm=${confirm:-Y}
         if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
             info "Aborting by user request."

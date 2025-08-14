@@ -125,7 +125,7 @@ with lib;
         "custom/exit" = {
           tooltip = false;
           format = "";
-          on-click = "sleep 0.1 && wlogout";
+          on-click = "sleep 0.1 && hyprctl dispatch exit";
         };
         "clock" = {
           format = " {:L%I:%M %p %Z}";

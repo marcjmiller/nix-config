@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ------------------------
+# CONFIG
+# ------------------------
+IP_FILE="$HOME/.config/eks_ips.yml"
+MAX_OLD_IPS=20
+AUTO_YES=false
+DRY_RUN=false
+
+# ------------------------
+# COLORS
+# ------------------------
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# ------------------------
+# MESSAGE HELPERS
+# ------------------------
+info()  { echo -e "${GREEN}[INFO] $*${NC}"; }
+warn()  { echo -e "${YELLOW}[WARN] $*${NC}"; }
+error() { echo -e "${RED}[ERROR] $*${NC}"; }
+debug() { echo -e "${BLUE}[DEBUG] $*${NC}"; }
+
+# ------------------------
+# PARSE FLAGS
+# ------------------------
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -y|--yes) AUTO_YES=true; shift ;;
+        -d|--dry-run) DRY_RUN=true; shift ;;
+        *) echo -e "${RED}Usage: $0 [-y|--yes] [-d|--dry-run]${NC}"; exit 1 ;;
+    esac
+done
+
+# ------------------------
+# 1️⃣ AWS SESSION VALIDATION
+# ------------------------
+if ! aws sts get-caller-identity >/dev/null 2>&1; then
+    error "AWS session invalid or expired."
+    exit 1
+fi
+
+AWS_ACCOUNT=$(aws sts get-caller-identity --query "Account" --output text)
+
+# ------------------------
+# 2️⃣ KUBE CONTEXT VALIDATION
+# ------------------------
+context=$(kubectl config current-context)
+cluster_name=${context#eks-}   # remove 'eks-' prefix
+
+if ! aws eks describe-cluster --name "$cluster_name" >/dev/null 2>&1; then
+    error "Current kube context '$context' does not correspond to a cluster in AWS account $AWS_ACCOUNT."
+    exit 1
+fi
+
+info "AWS session valid. Using cluster: $cluster_name in account $AWS_ACCOUNT."
+
+# ------------------------
+# 3️⃣ CHECK OR CREATE IP FILE
+# ------------------------
+if [[ ! -f "$IP_FILE" ]]; then
+    warn "IP tracking file not found at $IP_FILE. Creating a new one."
+    cat > "$IP_FILE" <<EOF
+current_ip: null
+old_ips: []
+EOF
+fi
+
+# ------------------------
+# 4️⃣ FETCH CURRENT IP
+# ------------------------
+fetched_ip=$(curl -s icanhazip.com)
+current_stored=$(yq -r '.current_ip' "$IP_FILE")
+
+# ------------------------
+# 5️⃣ HANDLE IP CHANGE & REPORT
+# ------------------------
+if [[ "$fetched_ip" != "$current_stored" ]]; then
+    warn "Detected new public IP: $fetched_ip"
+    warn "Previously stored IP:  $current_stored"
+
+    # Determine which old IPs would be removed from AWS CIDRs
+    current_ip_cidr="$current_stored/32"
+    old_ips_cidr=$(yq -r '.old_ips[]?' "$IP_FILE" | sed 's/$/\/32/')
+    current_cidrs=$(aws eks describe-cluster --name "$cluster_name" \
+        --query "cluster.resourcesVpcConfig.publicAccessCidrs" --output json)
+
+    # Figure out removals
+    to_remove=()
+    for old in $old_ips_cidr; do
+        if echo "$current_cidrs" | jq -e --arg old "$old" 'index($old) != null' >/dev/null; then
+            to_remove+=("$old")
+        fi
+    done
+
+    if [[ ${#to_remove[@]} -gt 0 ]]; then
+        warn "The following old IPs would be removed from publicAccessCidrs: ${to_remove[*]}"
+    else
+        info "No old IPs will be removed from publicAccessCidrs."
+    fi
+
+    if ! $AUTO_YES; then
+        read -rp "Update stored IP and push to AWS? [Y/n]: " confirm
+        confirm=${confirm:-Y}
+        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+            info "Aborting by user request."
+            exit 0
+        fi
+    fi
+
+    if ! $DRY_RUN; then
+        # Add old IP to old_ips if valid
+        if [[ -n "$current_stored" && "$current_stored" != "null" ]]; then
+            old_count=$(yq eval '.old_ips | length' "$IP_FILE")
+            if (( old_count > MAX_OLD_IPS )); then
+                yq -i '.old_ips = (.old_ips | .[-'"$MAX_OLD_IPS"':])' "$IP_FILE"
+            fi
+        fi
+
+        # Update current_ip
+        yq -i '.current_ip = "'"$fetched_ip"'"' "$IP_FILE"
+
+        # Prune old_ips to last MAX_OLD_IPS
+        yq -i '.old_ips |= (.[-'"$MAX_OLD_IPS"':])' "$IP_FILE"
+    fi
+fi
+
+# ------------------------
+# 6️⃣ BUILD /32 CIDRS
+# ------------------------
+current_ip_cidr="$fetched_ip/32"
+old_ips_cidr=$(yq -r '.old_ips[]?' "$IP_FILE" | sed 's/$/\/32/')
+
+info "EKS cluster: $cluster_name"
+info "Current IP CIDR: $current_ip_cidr"
+info "Removing old IPs: $(echo "$old_ips_cidr" | tr '\n' ' ')"
+
+# ------------------------
+# 7️⃣ FETCH CURRENT CIDRS
+# ------------------------
+current_cidrs=$(aws eks describe-cluster --name "$cluster_name" \
+    --query "cluster.resourcesVpcConfig.publicAccessCidrs" --output json)
+
+# ------------------------
+# 8️⃣ REMOVE OLD IPS
+# ------------------------
+cleaned_cidrs="$current_cidrs"
+for old in $old_ips_cidr; do
+    cleaned_cidrs=$(echo "$cleaned_cidrs" | jq --arg old "$old" 'map(select(. != $old))')
+done
+
+removed_count=$(( $(echo "$current_cidrs" | jq length) - $(echo "$cleaned_cidrs" | jq length) ))
+
+# Safety: AWS limit check
+if [[ $removed_count -eq 0 && $(echo "$current_cidrs" | jq length) -ge 40 ]]; then
+    error "CIDR list at AWS limit (40) and no old IPs removed."
+    exit 1
+fi
+
+# ------------------------
+# 9️⃣ ADD CURRENT IP
+# ------------------------
+updated_cidrs=$(echo "$cleaned_cidrs" | jq --arg ip "$current_ip_cidr" '
+    if index($ip) == null then . + [$ip] else . end
+')
+
+# ------------------------
+# 🔟 APPLY OR DRY-RUN
+# ------------------------
+if $DRY_RUN; then
+    debug "DRY-RUN MODE: The following publicAccessCidrs would be applied:"
+    echo "$updated_cidrs" | jq .
+else
+    if aws eks update-cluster-config \
+        --name "$cluster_name" \
+        --resources-vpc-config publicAccessCidrs="$updated_cidrs" \
+        --no-cli-pager >/dev/null 2>&1; then
+        info "👍 EKS publicAccessCidrs updated successfully."
+    else
+        error "Failed to update EKS publicAccessCidrs. See AWS CLI output above."
+        exit 1
+    fi
+fi

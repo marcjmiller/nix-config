@@ -51,6 +51,12 @@
               updateInterval = 24 * 60 * 60 * 1000; # every day
               definedAliases = [ "@nw" ];
             };
+            "Home Manager Options Search" = {
+              urls = [ { template = "https://home-manager-options.extranix.com/?query={searchTerms}&release=release-25.05"; } ];
+              icon = "https://home-manager-options.extranix.com/images/favicon.png";
+              updateInterval = 24 * 60 * 60 * 1000; # every day
+              definedAliases = [ "@hm" ];
+            };
             "bing".metaData.hidden = true;
             "google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
           };

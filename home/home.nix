@@ -68,15 +68,22 @@ with lib;
     usbutils
     vial
     wayvnc
+    xfce.catfish
     yazi
     yq-go
     pcsc-tools
-    (pkgs.writeShellScriptBin "setup-browser-CAC" ''
+
+    # User-defined functions
+    (writeShellScriptBin "setup-browser-CAC" ''
       NSSDB="''${HOME}/.pki/nssdb"
       mkdir -p ''${NSSDB}
 
       ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add yubi-smartcard \
         -libfile ${pkgs.opensc}/lib/opensc-pkcs11.so
+    '')
+
+    (writeShellScriptBin "eks-update-cidrs" ''
+      ${builtins.readFile ./files/bin/eks-update-cidrs}
     '')
   ];
 
@@ -130,13 +137,7 @@ with lib;
   '';
 
   programs = {
-    # Add packages from home Manager that you want
     obs-studio.enable = true;
-    # appimage = {
-    #   enable = true;
-    #   binfmt = true;
-    #   package = pkgs.appimage-run;
-    # };
 
     kitty = {
       settings = {
@@ -233,6 +234,7 @@ with lib;
 
     udiskie.enable = true;
   };
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
@@ -241,6 +243,8 @@ with lib;
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
       "text/html" = "firefox.desktop";
+      "image/jpeg" = "firefox.desktop";
+      "image/png" = "firefox.desktop";
     };
   };
 }

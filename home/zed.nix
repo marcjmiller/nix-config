@@ -4,7 +4,12 @@
 }:
 {
   programs.zed-editor = {
+    installRemoteServer = true;
     userSettings = {
+      lsp.rust-analyzer.binary = {
+        path_lookup = true;
+        ignore_system_versions = false;
+      };
       indent_guides = {
         enabled = true;
         coloring = "indent_aware";
@@ -18,7 +23,7 @@
         light = "Catppuccin Latte";
       };
       icon_theme = "Catppuccin Mocha";
-      autosave = lib.mkForce  {
+      autosave = lib.mkForce {
         after_delay.milliseconds = 2000;
       };
       vim_mode = lib.mkForce false;
@@ -31,6 +36,7 @@
       "docker"
       "docker compose"
       "git firefly"
+      "rust-src"
     ];
   };
 }

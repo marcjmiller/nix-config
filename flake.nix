@@ -91,6 +91,7 @@
         };
       };
       homeConfigurations = {
+        home-manager.backupFileExtension = "backup";
         "${user.name}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {

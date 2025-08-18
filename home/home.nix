@@ -1,11 +1,9 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
-  braveThemePath = "${config.home.homeDirectory}/.local/share/brave-theme";
   inherit (import ./variables.nix)
     desktopImage
     mainMonitor
@@ -60,6 +58,7 @@ with lib;
     papirus-icon-theme
     psmisc
     pulumi-bin
+    rust-analyzer
     sops
     stern
     twofctl

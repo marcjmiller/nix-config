@@ -44,6 +44,7 @@ in
         "name:3, monitor:${mainMonitor}"
         "name:lp, monitor:${laptopMonitor}"
         "name:obs, monitor:${mainMonitor}"
+        "special:exposed,gapsout:60,gapsin:30,bordersize:5,border:true,shadow:false"
       ];
 
       layerrule = [
@@ -55,15 +56,15 @@ in
 
       windowrulev2 = [
         # Chat
-        "workspace chat, class:^(?i)discord$"
-        "workspace chat, class:^(?i)slack$"
+        "workspace 4, class:^(?i)discord$"
+        "workspace 4, class:^(?i)slack$"
 
         # Dev
-        "workspace dev, class:^(?i)code$"
-        "workspace dev, class:^(?i)dev\.zed\.zed$"
+        "workspace 5, class:^(?i)code$"
+        "workspace 5, class:^(?i)dev\.zed\.zed$"
 
         # OBS
-        "workspace obs, class:^(?i)com\.obsproject\.studio"
+        "workspace 6, class:^(?i)com\.obsproject\.studio"
       ];
 
       decoration = {
@@ -100,17 +101,17 @@ in
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
         "udiskie"
         "~/.config/scripts/hypr/toggle-touchpad.sh"
+        "/usr/local/bin/pypr --debug /tmp/pypr.log"
 
         # Start chat apps on chat workspace
-        "[workspace chat silent] discord"
-        "[workspace chat silent] slack"
+        "[workspace 4 silent] slack"
 
         # Start code editor on code workspace
-        "[workspace dev silent] zed"
-        "[workspace dev silent] kitty"
+        "[workspace 5 silent] zed"
+        "[workspace 5 silent] kitty"
 
         # Start OBS on obs workspace
-        "[workspace obs silent] obs-studio"
+        "[workspace 6 silent] obs-studio"
       ];
 
       # Monitor configuration events
@@ -119,5 +120,16 @@ in
       #   ",monitorremoved,*,~/.config/scripts/hypr/toggle-touchpad.sh"
       # ];
     };
+
+    # extraConfig = ''
+    #   device {
+    #     name = "yowkees-keyball61-consumer-control-1";
+    #     defaultSpeed = 2;
+    #   }
+    #   device {
+    #     name = "yowkees-keyball61-mouse";
+    #     defaultSpeed = 2;
+    #   }
+    # '';
   };
 }

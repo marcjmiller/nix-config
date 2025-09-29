@@ -18,7 +18,10 @@
       therato = "pexels-therato.jpg";
       blackhole = "supermassive-black-hole.jpg";
       astronaut = "astronaut.jpg";
+      nebula = "nebula.png";
+      milkyway = "milkyway.png";
+      milkyway-mocha = "milkyway-mocha.png";
+      solar_system = "solar_system.png";
     }
-    .therato;
-
+    .milkyway-mocha;
 }

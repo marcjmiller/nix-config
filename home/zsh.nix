@@ -55,7 +55,7 @@
       extip = "curl icanhazip.com/v4";
       gcat = "git commit --all --template ~/.gitmessage";
       gpc = "find . -mindepth 1 -maxdepth 1 -type d | xargs -P5 -I{} git -C {} pull";
-      gwup = "pushd ~/workspace/govcloud && find . -type d -name .git -exec dirname {} \\; | xargs -P10 -n1 -I{} bash -c 'output=\$(git -C {} pull --quiet 2>&1); status=\$?; if [ \$status -eq 0 ]; then echo \"🔄 Pulling {} ... ✅\"; else echo \"🔄 Pulling {} ... ❌\"; echo \"[\$(date)] {}: \$output\" >> ~/gwup-failures.txt; fi' && popd";
+      gwup = "pushd ~/workspace/govcloud && find . -type d -a ! -name '.git' -exec test -d {}/.git \\; -print | xargs -P10 -I{} bash -c 'repo=\"{}\"; echo \"🔄 Updating \$repo...\"; cd \"\$repo\" && default_branch=\$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed \"s|^refs/remotes/origin/||\" || echo \"main\") && git checkout \"\$default_branch\" --quiet 2>/dev/null && git pull --quiet && echo \"✅ \$repo updated successfully\" || (echo \"❌ \$repo failed to update\" && echo \"[\$(date)] \$repo: \$(git status --porcelain 2>&1 || echo \"git error\")\" >> ~/gwup-failures.txt)' && popd";
       homecfg = "zed ~/nix-config";
       kcu = "2fctl kubeconfig update";
       pp = "pulumi";
@@ -63,6 +63,8 @@
       rl = "source ~/.zshrc";
       shell = "nix develop -c $SHELL";
       watch = "watch ";
+      manualrbh = "nix run home-manager -- switch --flake ~/nix-config";
+      manualrb = "nixos rebuild switch --flake ~/nix-config";
     };
 
     initContent = ''

@@ -19,8 +19,8 @@
       tab_size = 2;
       theme = lib.mkForce {
         mode = "dark";
-        dark = "Catppuccin Mocha";
-        light = "Catppuccin Latte";
+        dark = "Base16 Stylix";
+        light = "Base16 Stylix";
       };
       icon_theme = "Catppuccin Mocha";
       autosave = lib.mkForce {
@@ -33,7 +33,7 @@
       "catppuccin"
       "catppuccin-icons"
       "toml"
-      "docker"
+      "dockerfile"
       "docker compose"
       "git firefly"
       "rust-src"

@@ -1,4 +1,5 @@
 {
+  inputs,
   lib,
   pkgs,
   ...
@@ -39,18 +40,20 @@ with lib;
 
   home.packages = with pkgs; [
     age
-    appimage-run
+    appgate-sdp
     bat
     bluez
     bluez-tools
     dive
     eza
+    file-roller
     fzf
     gimp
     go
     httpie
     httpie-desktop
     libnotify
+    meld
     networkmanagerapplet
     nodejs_24
     noto-fonts
@@ -58,6 +61,7 @@ with lib;
     papirus-icon-theme
     psmisc
     pulumi-bin
+    inputs.pyprland.packages.${pkgs.system}.default
     rust-analyzer
     sops
     stern
@@ -94,6 +98,9 @@ with lib;
       source = ./files/scripts;
       recursive = true;
     };
+    ".config/hypr/pyprland.toml" = {
+      source = ./files/pyprland.toml;
+    };
     "Pictures/Wallpapers" = {
       source = ./files/wallpapers;
       recursive = true;
@@ -102,6 +109,7 @@ with lib;
       source = ./files/obs;
       recursive = true;
     };
+    
   };
 
   secondfront.themes.enable = false;
@@ -247,6 +255,7 @@ with lib;
       "x-scheme-handler/http" = "firefox.desktop";
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
+      "x-terminal-emulator" = "kitty.desktop";
       "text/html" = "firefox.desktop";
       "image/jpeg" = "firefox.desktop";
       "image/png" = "firefox.desktop";

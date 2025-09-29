@@ -69,11 +69,17 @@ with lib;
         };
         "hyprland/workspaces" = {
           show-special = true;
-          format = "{name}";
+          format = "{icon}";
           format-icons = {
-            default = " ";
-            active = " ";
-            urgent = " ";
+            # default = " ";
+            # active = " ";
+            # urgent = " ";
+            "1" = "1";
+            "2" = "2";
+            "3" = "3";
+            "4" = "chat";
+            "5" = "dev";
+            "6" = "obs";
           };
           on-scroll-up = "hyprctl dispatch workspace e+1";
           on-scroll-down = "hyprctl dispatch workspace e-1";
@@ -81,9 +87,9 @@ with lib;
             "1" = [ ];
             "2" = [ ];
             "3" = [ ];
-            "chat" = [ ];
-            "dev" = [ ];
-            "obs" = [ ];
+            "4" = [ ];
+            "5" = [ ];
+            "6" = [ ];
           };
         };
         "hyprland/window" = {

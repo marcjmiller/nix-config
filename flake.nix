@@ -13,8 +13,13 @@
     };
     nur.url = "github:nix-community/NUR";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    pyprland = {
+      url = "github:hyprland-community/pyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix.url = "github:danth/stylix";
     nixcord.url = "github:kaylorben/nixcord";
+
     # SecondFront Modules and Projects
     secondfront.url = "github:tonybutt/modules";
     twofctl = {
@@ -33,16 +38,17 @@
 
   outputs =
     {
-      nixpkgs,
-      stylix,
+      disko,
       home-manager,
       hyprland,
-      disko,
-      nixos-hardware,
-      nur,
-      secondfront,
-      twofctl,
       nixcord,
+      nixos-hardware,
+      nixpkgs,
+      nur,
+      pyprland,
+      secondfront,
+      stylix,
+      twofctl,
       ...
     }@inputs:
     let

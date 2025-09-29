@@ -3,7 +3,6 @@
   programs = {
     firefox = {
       policies = {
-
         ExtensionSettings =
           with pkgs.nur.repos.rycee.firefox-addons;
           builtins.mapAttrs
@@ -16,6 +15,8 @@
               "${bitwarden.addonId}" = "${bitwarden.src.url}";
               "${tampermonkey.addonId}" = "${tampermonkey.src.url}";
               "${stylus.addonId}" = "${stylus.src.url}";
+              "${xbrowsersync.addonId}" = "${xbrowsersync.src.url}";
+              "${improved-tube.addonId}" = "${improved-tube.src.url}";
             };
       };
       profiles.marcmiller = {
@@ -52,7 +53,11 @@
               definedAliases = [ "@nw" ];
             };
             "Home Manager Options Search" = {
-              urls = [ { template = "https://home-manager-options.extranix.com/?query={searchTerms}&release=release-25.05"; } ];
+              urls = [
+                {
+                  template = "https://home-manager-options.extranix.com/?query={searchTerms}&release=release-25.05";
+                }
+              ];
               icon = "https://home-manager-options.extranix.com/images/favicon.png";
               updateInterval = 24 * 60 * 60 * 1000; # every day
               definedAliases = [ "@hm" ];

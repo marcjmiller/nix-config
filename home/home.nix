@@ -13,6 +13,7 @@ in
 with lib;
 {
   imports = [
+    ./brave.nix
     ./firefox.nix
     ./hyprland
     ./waybar
@@ -53,6 +54,7 @@ with lib;
     httpie
     httpie-desktop
     libnotify
+    libpwquality
     meld
     networkmanagerapplet
     nodejs_24
@@ -109,7 +111,6 @@ with lib;
       source = ./files/obs;
       recursive = true;
     };
-    
   };
 
   secondfront.themes.enable = false;
@@ -154,7 +155,7 @@ with lib;
     };
 
     chromium = {
-      enable = true;
+      enable = false;
       package = pkgs.brave;
       extensions = [
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
@@ -200,6 +201,38 @@ with lib;
   };
 
   services = {
+    hypridle = {
+      enable = true;
+      settings = {
+        general = {
+          lock_cmd = "pidof hyprlock || hyprlock"; # avoid starting multiple hyprlock instances.
+          after_sleep_cmd = "hyprctl dispatch dpms on"; # to avoid having to press a key twice to turn on the display.
+          before_sleep_cmd = "loginctl lock-session"; # lock before suspend.
+        };
+
+        listener = [
+          {
+            timeout = 150; # 2.5min - dim the screen
+            on-timeout = "${pkgs.brightnessctl} -s set 10";
+            on-resume = "${pkgs.brightnessctl} -r";
+          }
+          {
+            timeout = 300; # 5 minutes - lock the screen
+            on-timeout = "loginctl lock-session";
+          }
+          {
+            timeout = 600; # 10 minutes - turn off displays
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on && ${pkgs.brightnessctl} -r";
+          }
+          {
+            timeout = 1200; # 20 minutes - suspend system
+            on-timeout = "systemctl suspend";
+          }
+        ];
+      };
+    };
+
     hyprpaper = {
       enable = true;
       settings.preload = [

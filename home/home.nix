@@ -57,6 +57,7 @@ with lib;
     libpwquality
     meld
     networkmanagerapplet
+    networkmanager-openvpn
     nodejs_24
     noto-fonts
     openssl
@@ -276,6 +277,10 @@ with lib;
           };
         }
       ];
+    };
+    
+    network-manager-applet = {
+      enable = true;
     };
 
     udiskie.enable = true;

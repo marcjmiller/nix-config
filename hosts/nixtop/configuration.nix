@@ -8,14 +8,23 @@
     ./disko-config.nix
   ];
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      21
-      80
-      443
-      5900
-    ];
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        21
+        80
+        443
+        5900
+      ];
+    };
+
+    networkmanager = {
+      enable = true;
+      plugins = [
+        pkgs.networkmanager-openvpn
+      ];
+    };
   };
 
   modules = {
@@ -57,7 +66,7 @@
       DISK_IDLE_SECS_ON_BAT = 2;
     };
   };
-  
+
   # Enforce password complexity requirements
   environment.etc."/security/pwquality.conf".text = ''
     # Minimum password length
@@ -81,6 +90,22 @@
     # Enforce for root user
     enforce_for_root = true
   '';
+
+  users.users.marcmiller = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    description = "Marc Miller";
+    extraGroups = [
+      "bluetooth"
+      "docker"
+      "input"
+      "kvm"
+      "libvirtd"
+      "networkmanager"
+      "qemu-libvirtd"
+      "wheel"
+    ];
+  };
 
   system.stateVersion = "24.05";
 }

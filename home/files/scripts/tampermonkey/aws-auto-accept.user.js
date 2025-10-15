@@ -6,10 +6,12 @@
 // @author       marcjmiller
 // @match        https://login.afwerx.dso.mil/*
 // @match        https://login.gamewarden.io/*
+// @match        https://login.fedramp.gamewarden.io/*
+// @match        https://login.secondfront.com/*
 // @match        https://login.dso.mil/*
 // @match        https://d-9067aa9977.awsapps.com/*
-// @match        https://device.sso.us-gov-east-1.amazonaws.com/*
-// @match        https://start.us-gov-east-1.us-gov-home.awsapps.com/*
+// @match        https://device.sso.*.amazonaws.com/*
+// @match        https://start.*.us-gov-home.awsapps.com/*
 // @grant        none
 // ==/UserScript==
 

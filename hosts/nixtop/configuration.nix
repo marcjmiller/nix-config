@@ -21,6 +21,10 @@
       ];
     };
 
+    extraHosts = ''
+      18.253.78.131 login.afwerx.dso.mil
+    '';
+
     networkmanager = {
       enable = true;
       plugins = [
@@ -51,8 +55,8 @@
     ollama = {
       enable = true;
       acceleration = "cuda";
-      loadModels = [ 
-        "qwen2.5-coder:7b" 
+      loadModels = [
+        "qwen2.5-coder:7b"
       ];
     };
 

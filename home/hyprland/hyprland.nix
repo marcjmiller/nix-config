@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -14,11 +15,17 @@ in
 {
   wayland.windowManager.hyprland = {
     settings = {
+      # Check logs with: bat $XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log
+      # debug = {
+      #   disable_logs = false;
+      # };
+      
       env = [
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_TYPE,wayland"
         "XDG_SESSION_DESKTOP,Hyprland"
       ];
+      
       input = {
         repeat_delay = 200;
         repeat_rate = 75;
@@ -37,14 +44,14 @@ in
       };
 
       workspace = [
-        "name:chat, monitor:${mainMonitor}"
-        "name:dev, monitor:${mainMonitor}"
         "name:1, monitor:${mainMonitor}"
         "name:2, monitor:${mainMonitor}"
         "name:3, monitor:${mainMonitor}"
+        "name:4, monitor:${mainMonitor}"
         "name:lp, monitor:${laptopMonitor}"
-        "name:obs, monitor:${mainMonitor}"
         "special:exposed,gapsout:60,gapsin:30,bordersize:5,border:true,shadow:false"
+        "special:obs"
+        "special:chat"
       ];
 
       layerrule = [
@@ -56,15 +63,11 @@ in
 
       windowrulev2 = [
         # Chat
-        "workspace 4, class:^(?i)discord$"
-        "workspace 4, class:^(?i)slack$"
-
-        # Dev
-        "workspace 5, class:^(?i)code$"
-        "workspace 5, class:^(?i)dev\.zed\.zed$"
+        "workspace special:chat, class:^(discord)$"
+        "workspace special:chat, class:^(slack)$"
 
         # OBS
-        "workspace 6, class:^(?i)com\.obsproject\.studio"
+        "workspace special:obs, class:^(com.obsproject.Studio)$"
       ];
 
       decoration = {
@@ -80,7 +83,7 @@ in
         groupbar = {
           enabled = true;
           font_size = 16;
-          font_family = "JetBrainsMono Nerd Font Mono";
+          font_family = "JetBrainsMono Nerd Font Propo";
           font_weight_inactive = "Normal";
           font_weight_active = "Bold";
           height = 20;
@@ -101,35 +104,19 @@ in
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
         "udiskie"
         "~/.config/scripts/hypr/toggle-touchpad.sh"
-        "/usr/local/bin/pypr --debug /tmp/pypr.log"
+        "/home/marcmiller/.nix-profile/bin/pypr --debug /tmp/pypr.log"
+        "${pkgs.hypridle}/bin/hypridle"
 
         # Start chat apps on chat workspace
-        "[workspace 4 silent] slack"
+        "[workspace special:chat silent] ${pkgs.slack}/bin/slack"
 
         # Start code editor on code workspace
-        "[workspace 5 silent] zed"
-        "[workspace 5 silent] kitty"
+        "[workspace 4 silent] ${pkgs.zed-editor}/bin/zed-editor"
+        "[workspace 4 silent] ${pkgs.kitty}/bin/kitty"
 
         # Start OBS on obs workspace
-        "[workspace 6 silent] obs-studio"
+        "[workspace special:obs silent] ${pkgs.obs-studio}/bin/obs-studio"
       ];
-
-      # Monitor configuration events
-      # bindl = [
-      #   ",monitoradded,*,~/.config/scripts/hypr/toggle-touchpad.sh"
-      #   ",monitorremoved,*,~/.config/scripts/hypr/toggle-touchpad.sh"
-      # ];
     };
-
-    # extraConfig = ''
-    #   device {
-    #     name = "yowkees-keyball61-consumer-control-1";
-    #     defaultSpeed = 2;
-    #   }
-    #   device {
-    #     name = "yowkees-keyball61-mouse";
-    #     defaultSpeed = 2;
-    #   }
-    # '';
   };
 }

@@ -23,5 +23,5 @@
       milkyway-mocha = "milkyway-mocha.png";
       solar_system = "solar_system.png";
     }
-    .milkyway-mocha;
+    .blackhole;
 }

@@ -40,7 +40,7 @@ with lib;
           format-ethernet = "";
           format-linked = "{ifname} (No IP) ";
           format-wifi = "{essid} ";
-          on-click = "${terminal} --class dropdown -e ${pkgs.networkmanager}/bin/nmtui";
+          on-click = "";
         };
         pulseaudio = {
           scroll-step = 1;
@@ -77,9 +77,7 @@ with lib;
             "1" = "1";
             "2" = "2";
             "3" = "3";
-            "4" = "chat";
-            "5" = "dev";
-            "6" = "obs";
+            "4" = "dev";
           };
           on-scroll-up = "hyprctl dispatch workspace e+1";
           on-scroll-down = "hyprctl dispatch workspace e-1";
@@ -88,8 +86,6 @@ with lib;
             "2" = [ ];
             "3" = [ ];
             "4" = [ ];
-            "5" = [ ];
-            "6" = [ ];
           };
         };
         "hyprland/window" = {
@@ -105,6 +101,7 @@ with lib;
           modules = [
             "battery"
             "cpu"
+            "temperature"
             "memory"
             "network"
             "pulseaudio"
@@ -112,6 +109,10 @@ with lib;
           drawer = {
             transition-duration = 500;
           };
+        };
+        "temperature" = {
+          "hwmon-path" = "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp1_input";
+          "format" = "{temperatureC}°C";
         };
         "memory" = {
           tooltip = true;
@@ -192,7 +193,7 @@ with lib;
     style = concatStrings [
       ''
         * {
-          font-family: JetBrainsMono Nerd Font Mono;
+          font-family: JetBrainsMono NFP;
           font-size: 18px;
           border-radius: 0px;
           border: none;
@@ -257,7 +258,7 @@ with lib;
         }
         #battery, #pulseaudio, #cpu, #memory,
         #network, #idle_inhibitor, #clock,
-        #tray, #custom-exit {
+        #tray, #temperature, #custom-exit {
           font-weight: bold;
           margin: 8px 7px 8px 0;
           padding: 0px 18px;

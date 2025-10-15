@@ -22,16 +22,22 @@ in
       "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
       "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
       "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
+      
+      # Special workspaces
+      "$mainMod, C, togglespecialworkspace, chat"
+      "$mainMod, O, togglespecialworkspace, obs"
 
       "$mainMod, D, exec, pypr expose"
       "$mainMod, E, exec, thunar"
       "$mainMod, F, togglefloating,"
       "$mainMod, G, togglegroup"
+      "$mainMod SHIFT, L, exec, hyprlock"
       "$mainMod, Q, killactive,"
       "$mainMod, P, pseudo, # dwindle"
       "$mainMod, Return, exec, ${terminal}"
       "$mainMod, S, togglesplit, # dwindle"
       "$mainMod, SPACE, exec, fuzzel"
+      "$mainMod SHIFT, Return, exec, fuzzel"
       "$mainMod, TAB, workspace, previous"
       "$mainMod, U, moveoutofgroup"
       "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"

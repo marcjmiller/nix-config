@@ -47,25 +47,35 @@
     enable = true;
   };
 
-  services.tlp = {
-    enable = true;
+  services = {
+    ollama = {
+      enable = true;
+      acceleration = "cuda";
+      loadModels = [ 
+        "qwen2.5-coder:7b" 
+      ];
+    };
 
-    settings = {
-      # CPU scaling governors
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    tlp = {
+      enable = true;
 
-      # CPU performance scaling (for Intel)
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      settings = {
+        # CPU scaling governors
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
 
-      # Wi-Fi power management
-      WIFI_PWR_ON_AC = "off";
-      WIFI_PWR_ON_BAT = "on";
+        # CPU performance scaling (for Intel)
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
 
-      # Optional: Disk power management
-      DISK_IDLE_SECS_ON_AC = 0;
-      DISK_IDLE_SECS_ON_BAT = 2;
+        # Wi-Fi power management
+        WIFI_PWR_ON_AC = "off";
+        WIFI_PWR_ON_BAT = "on";
+
+        # Optional: Disk power management
+        DISK_IDLE_SECS_ON_AC = 0;
+        DISK_IDLE_SECS_ON_BAT = 2;
+      };
     };
   };
 
@@ -108,7 +118,7 @@
       "wheel"
     ];
   };
-  
+
   virtualisation = lib.mkForce {
     docker.enable = true;
     containers.enable = true;

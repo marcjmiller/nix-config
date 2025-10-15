@@ -21,7 +21,7 @@
     nixcord.url = "github:kaylorben/nixcord";
 
     # SecondFront Modules and Projects
-    secondfront.url = "github:tonybutt/modules";
+    secondfront.url = "github:marcjmiller/nix-modules";
     twofctl = {
       type = "gitlab";
       host = "code.il2.gamewarden.io";

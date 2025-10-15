@@ -26,6 +26,10 @@ in
         "XDG_SESSION_DESKTOP,Hyprland"
       ];
       
+      gesture = [
+        "3, horizontal, workspace"
+      ];
+      
       input = {
         repeat_delay = 200;
         repeat_rate = 75;
@@ -69,6 +73,7 @@ in
         # OBS
         "workspace special:obs, class:^(com.obsproject.Studio)$"
       ];
+      
 
       decoration = {
         blur = lib.mkForce {

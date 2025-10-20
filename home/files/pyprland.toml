@@ -1,2 +1,21 @@
 [pyprland]
-plugins = ["expose", "scratchpads"]
+plugins = ["expose", "scratchpads", "fetch_client_menu"]
+
+[scratchpads.terminals]
+animation = "fromBottom"
+margin = 50
+size = "75% 60%"
+max_size = "1920px 100%"
+
+[scratchpads.term]
+command = "kitty --class kitty-dropterm"
+class = "kitty-dropterm"
+use = "terminals"
+
+[scratchpads.volume]
+animation = "fromBottom"
+command = "pavucontrol"
+class = "org.pulseaudio.pavucontrol"
+size = "40% 90%"
+unfocus = "hide"
+lazy = true

@@ -49,6 +49,7 @@ with lib;
     eza
     file-roller
     fzf
+    gcc
     gimp
     go
     httpie

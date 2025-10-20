@@ -7,8 +7,12 @@
   mainMonitor = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M28U 22100B010513";
 
   # Defaults/common use apps
-  browser = "firefox";
-  terminal = "kitty";
+  apps = {
+    browser = "firefox";
+    fileManager = "thunar";
+    launcher = "fuzzel";
+    terminal = "kitty";
+  };
 
   # Wallpaper switcher
   desktopImage =

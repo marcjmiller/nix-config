@@ -56,7 +56,7 @@
       enable = true;
       acceleration = "cuda";
       loadModels = [
-        "qwen2.5-coder:7b"
+        "qwen3-coder:30b"
       ];
     };
 

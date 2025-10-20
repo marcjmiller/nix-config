@@ -70,6 +70,7 @@
         settings = {
           "extensions.autoDisableScopes" = 0;
           "media.webrtc.capture.allow-pipewire" = true;
+          "media.hardwaremediakeys.enabled" = false;
         };
       };
     };

@@ -68,7 +68,7 @@ with lib;
           tooltip = false;
         };
         "hyprland/workspaces" = {
-          show-special = true;
+          show-special = false;
           format = "{icon}";
           format-icons = {
             # default = " ";

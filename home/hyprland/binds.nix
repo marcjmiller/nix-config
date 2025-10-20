@@ -1,7 +1,7 @@
 { ... }:
 let
   inherit (import ../variables.nix)
-    terminal
+  apps
     ;
 in
 {
@@ -14,6 +14,9 @@ in
       "$mainMod, 4, workspace, 4"
       "$mainMod, 5, workspace, 5"
       "$mainMod, 6, workspace, 6"
+      "$mainMod, mouse_down, workspace, e+1"
+      "$mainMod, mouse_up, workspace, e-1"
+      "$mainMod, TAB, workspace, previous"
 
       # Move windows to workspaces silently
       "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
@@ -26,39 +29,30 @@ in
       # Special workspaces
       "$mainMod, C, togglespecialworkspace, chat"
       "$mainMod, O, togglespecialworkspace, obs"
-
-      "$mainMod, D, exec, pypr expose"
-      "$mainMod, E, exec, thunar"
-      "$mainMod, F, togglefloating,"
-      "$mainMod, G, togglegroup"
+      
+      # Pypr commands
+      "$mainMod, D, exec, pypr expose" # Expose view
+      "$mainMod SHIFT, V, exec, pypr toggle volume" # Toggle terminal
+      "$mainMod SHIFT, W, exec, pypr fetch_client_menu" # Find lost windows
+      "$mainMod, escape, exec, pypr toggle term" # Toggle terminal
+      
+      # Launch apps
+      "$mainMod SHIFT, B, exec, ${apps.browser}"
+      "$mainMod, E, exec, ${apps.fileManager}"
       "$mainMod SHIFT, L, exec, hyprlock"
-      "$mainMod, Q, killactive,"
-      "$mainMod, P, pseudo, # dwindle"
-      "$mainMod, Return, exec, ${terminal}"
-      "$mainMod, S, togglesplit, # dwindle"
-      "$mainMod, SPACE, exec, fuzzel"
-      "$mainMod SHIFT, Return, exec, fuzzel"
-      "$mainMod, TAB, workspace, previous"
-      "$mainMod, U, moveoutofgroup"
-      "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-      "$mainMod, Y, exec, ykmanoath"
+      "$mainMod, Return, exec, ${apps.terminal}"
+      "$mainMod SHIFT, Return, exec, ${apps.launcher}"
+      
+      # Window actions
       ",F11,fullscreen"
-      "$mainMod, h, movefocus, l"
-      "$mainMod, l, movefocus, r"
-      "$mainMod, k, movefocus, u"
-      "$mainMod, j, movefocus, d"
-      "$mainMod ALT, J, changegroupactive, f"
-      "$mainMod ALT, K, changegroupactive, b"
-      "$mainMod SHIFT, h, movewindoworgroup, l"
-      "$mainMod SHIFT, l, movewindoworgroup, r"
-      "$mainMod SHIFT, k, movewindoworgroup, u"
-      "$mainMod SHIFT, j, movewindoworgroup, d"
-      "$mainMod CTRL, h, resizeactive, -60 0"
-      "$mainMod CTRL, l, resizeactive,  60 0"
-      "$mainMod CTRL, k, resizeactive,  0 -60"
-      "$mainMod CTRL, j, resizeactive,  0  60"
-      "$mainMod, mouse_down, workspace, e+1"
-      "$mainMod, mouse_up, workspace, e-1"
+      "$mainMod, F, togglefloating"
+      "$mainMod, G, togglegroup"
+      "$mainMod, P, pseudo, # dwindle"
+      "$mainMod, Q, killactive"
+      "$mainMod, S, togglesplit, # dwindle"
+      "$mainMod, U, moveoutofgroup"
+      
+      # Media controls
       "$mainMod, F3, exec, brightnessctl -d *::kbd_backlight set +33%"
       "$mainMod, F2, exec, brightnessctl -d *::kbd_backlight set 33%-"
       ", XF86AudioRaiseVolume, exec, pamixer -i 5 "
@@ -67,9 +61,16 @@ in
       ", XF86AudioMicMute, exec, pamixer --default-source -m"
       ", XF86MonBrightnessDown, exec, brightnessctl set 5%- "
       ", XF86MonBrightnessUp, exec, brightnessctl set +5% "
+      
+      # Copy/Paste
       '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
+      "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+      
+      # Waybar restart
       "$mainMod, B, exec, pkill -SIGUSR1 waybar"
       "$mainMod, W, exec, pkill -SIGUSR2 waybar"
+      
+      # Toggle Touchpad
       "$mainMod, T, exec, ~/.config/scripts/hypr/toggle-touchpad.sh"
     ];
 

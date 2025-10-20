@@ -109,7 +109,7 @@ in
         "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
         "udiskie"
         "~/.config/scripts/hypr/toggle-touchpad.sh"
-        "/home/marcmiller/.nix-profile/bin/pypr --debug /tmp/pypr.log"
+        "pypr --debug /tmp/pypr.log"
         "${pkgs.hypridle}/bin/hypridle"
 
         # Start chat apps on chat workspace

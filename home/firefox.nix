@@ -17,6 +17,7 @@
               "${stylus.addonId}" = "${stylus.src.url}";
               "${xbrowsersync.addonId}" = "${xbrowsersync.src.url}";
               "${improved-tube.addonId}" = "${improved-tube.src.url}";
+              "${ublock-origin.addonId}" = "${ublock-origin.src.url}";
             };
       };
       profiles.marcmiller = {

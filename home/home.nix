@@ -2,6 +2,7 @@
   inputs,
   lib,
   pkgs,
+  pkgs-stable,
   ...
 }:
 let
@@ -67,7 +68,7 @@ with lib;
     openssl
     papirus-icon-theme
     psmisc
-    pulumi
+    pkgs-stable.pulumi-bin
     inputs.pyprland.packages.${pkgs.system}.default
     rust-analyzer
     sops
@@ -77,7 +78,6 @@ with lib;
     typescript
     unzip
     usbutils
-    vial
     wayvnc
     xfce.catfish
     yazi
@@ -143,13 +143,6 @@ with lib;
     targets.kitty.enable = true;
   };
 
-  home.activation.generateBraveTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ -f ~/.config/stylix/generated.json ]; then
-      echo "🔧 Generating Brave theme from Stylix..."
-      # ${pkgs.bash}/bin/bash ~/.config/scripts/brave/gen-brave-theme.sh
-    fi
-  '';
-
   programs = {
     obs-studio.enable = true;
 
@@ -158,30 +151,6 @@ with lib;
         copy_on_select = "yes";
         scrollback_lines = 10000;
       };
-    };
-
-    chromium = {
-      enable = false;
-      package = pkgs.brave;
-      extensions = [
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
-        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # Darkreader
-        { id = "acacmjcicejlmjcheoklfdchempahoag"; } # JSON Lite
-        { id = "fmkadmapgofadopljbjfkapdkoienihi"; } # React Dev Tools
-        { id = "clngdbkpkpeebahjckkjfobafhncgmne"; } # Stylix
-        { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # Tampermonkey
-        { id = "cigimgkncpailblodniinggablglmebn"; } # Stylix-generated Theme
-      ];
-      commandLineArgs = [
-        "--force-dark-mode"
-        "--enable-features=WebUIDarkMode"
-        "--disable-features=AutofillSavePaymentMethods,AutofillCreditCardAuthentication,AutofillCreditCardUpload"
-        "--disable-features=AutofillSaveCardDialog,AutofillEnableAccountWalletStorage,AutofillCreditCardDownstream"
-        "--password-store=basic"
-        "--disable-save-password-bubble"
-        "--disable-autofill-keyboard-accessory-view"
-        "--wallet-service-use-sandbox"
-      ];
     };
 
     fuzzel = {

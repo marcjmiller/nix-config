@@ -2,13 +2,13 @@
   description = "USERS personal flake";
   inputs = {
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-    kickstart-nixvim.url = "github:JMartJonesy/kickstart.nixvim";
-    nixcord.url = "github:kaylorben/nixcord";
+    kickstart-nixvim.url = "github:marcjmiller/kickstart.nixvim";
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nur.url = "github:nix-community/NUR";
     stylix.url = "github:danth/stylix";
-    
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,9 +43,9 @@
       disko,
       home-manager,
       hyprland,
-      nixcord,
       nixos-hardware,
       nixpkgs,
+      nixpkgs-stable,
       nur,
       pyprland,
       secondfront,
@@ -65,6 +65,10 @@
           twofctl.overlays.default
           nur.overlays.default
         ];
+      };
+      pkgs-stable = import nixpkgs-stable {
+        inherit system;
+        config.allowUnfree = true;
       };
       user = {
         name = "marcmiller";
@@ -106,7 +110,7 @@
         "${user.name}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
-            inherit inputs user;
+            inherit inputs user pkgs-stable;
           };
           modules = [
             ./home/home.nix

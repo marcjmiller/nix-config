@@ -72,6 +72,7 @@ with lib;
     rust-analyzer
     sops
     stern
+    tree-sitter
     twofctl
     typescript
     unzip

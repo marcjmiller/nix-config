@@ -19,6 +19,8 @@ with lib;
     ./waybar
     ./zed.nix
     ./zsh.nix
+
+    inputs.kickstart-nixvim.homeManagerModules.default
   ];
 
   secondfront.hyprland.monitors = [
@@ -47,6 +49,7 @@ with lib;
     bluez-tools
     dive
     eza
+    fd
     file-roller
     fzf
     gcc
@@ -64,7 +67,7 @@ with lib;
     openssl
     papirus-icon-theme
     psmisc
-    pulumi-bin
+    pulumi
     inputs.pyprland.packages.${pkgs.system}.default
     rust-analyzer
     sops
@@ -192,6 +195,10 @@ with lib;
       };
     };
 
+    nixvim = {
+      enable = true;
+    };
+
     tealdeer = {
       enable = true;
       settings = {
@@ -279,7 +286,7 @@ with lib;
         }
       ];
     };
-    
+
     network-manager-applet = {
       enable = true;
     };

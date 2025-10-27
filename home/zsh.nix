@@ -65,6 +65,7 @@
       watch = "watch ";
       manualrbh = "nix run home-manager -- switch --flake ~/nix-config";
       manualrb = "nixos rebuild switch --flake ~/nix-config";
+      vi = "nvim";
     };
 
     initContent = ''

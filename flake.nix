@@ -1,8 +1,14 @@
 {
   description = "USERS personal flake";
   inputs = {
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    kickstart-nixvim.url = "github:JMartJonesy/kickstart.nixvim";
+    nixcord.url = "github:kaylorben/nixcord";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nur.url = "github:nix-community/NUR";
+    stylix.url = "github:danth/stylix";
+    
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,14 +17,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url = "github:nix-community/NUR";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     pyprland = {
       url = "github:hyprland-community/pyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
-    nixcord.url = "github:kaylorben/nixcord";
 
     # SecondFront Modules and Projects
     secondfront.url = "github:marcjmiller/nix-modules";

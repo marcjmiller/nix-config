@@ -63,6 +63,7 @@ with lib;
     meld
     networkmanagerapplet
     networkmanager-openvpn
+    nil
     nodejs_24
     noto-fonts
     openssl
@@ -70,7 +71,7 @@ with lib;
     psmisc
     pkgs-stable.pulumi-bin
     inputs.pyprland.packages.${pkgs.system}.default
-    rust-analyzer
+    rustup
     sops
     stern
     tree-sitter
@@ -249,7 +250,7 @@ with lib;
               {
                 criteria = "DP-2";
                 position = "0,0";
-                mode = "3840x2160@144";
+                mode = "3840x2160";
               }
             ];
           };

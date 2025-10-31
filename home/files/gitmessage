@@ -34,7 +34,6 @@
 # Co-authored-by: Keohn Akins <keohn.akins@secondfront.com>
 # Co-authored-by: Kureen Paige <kureen.paige@secondfront.com>
 # Co-authored-by: Lucas Pick <lucas.pick@secondfront.com>
-# Co-authored-by: Marc Miller <marc.miller@secondfront.com>
 # Co-authored-by: Nicholas Downey <nicholas.downey@secondfront.com>
 # Co-authored-by: Nicole Utt <nicole.utt@secondfront.com>
 # Co-authored-by: Robert Lee <robert.lee@secondfront.com>
@@ -46,6 +45,7 @@
 # Co-authored-by: Tyler Ross <tyler.ross@secondfront.com>
 # Co-authored-by: Josh Baker <josh.baker@secondfront.com>
 
+Signed-off-by: Marc Miller <marc.miller@secondfront.com>
 
 # How to Write a Git Commit Message:
 # https://chris.beams.io/posts/git-commit/

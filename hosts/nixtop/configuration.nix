@@ -8,6 +8,7 @@
     ./hardware-configuration.nix
     ./disko-config.nix
     ../../home/falcon.nix
+    ../../home/hexnode.nix
   ];
 
   networking = {

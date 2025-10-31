@@ -29,7 +29,7 @@
     syntaxHighlighting.enable = true;
 
     sessionVariables = {
-      EDITOR = "vim";
+      EDITOR = "nvim";
       BROWSER = "firefox";
     };
 

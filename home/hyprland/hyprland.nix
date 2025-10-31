@@ -72,6 +72,10 @@ in
 
         # OBS
         "workspace special:obs, class:^(com.obsproject.Studio)$"
+        
+        # Float/Center Bitwarden firefox windows
+        "float,class:firefox,title:Bitwarden"
+        "center,class:firefox,title:Bitwarden"
       ];
       
 

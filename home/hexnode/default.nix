@@ -1,41 +1,64 @@
-{ 
-  buildFHSEnv, 
-  lib,
-  openssh,
-  pkgs, 
+{
   stdenv,
-  ... 
+  lib,
+  autoPatchelfHook,
+  buildFHSEnv,
+  dbus,
+  openssh,
+  glib,
+  glibc,
+  gobject-introspection,
+  zlib,
+  ...
 }:
 let
-  agentBinary = /opt/hexnode/hexnode_agent;
   hexnode = stdenv.mkDerivation {
     pname = "hexnode-agent";
     version = "1.0.0";
-  
-    src = agentBinary;
-  
-    nativeBuildInputs = [ openssh ];
-  
-    unpackPhase = "true";
-  
+
+    src = /opt/hexnode/hexnode_agent;
+
+    nativeBuildInputs = [ autoPatchelfHook ];
+
+    buildInputs = [
+      openssh
+      dbus
+      glib
+      glibc
+      gobject-introspection
+      zlib
+    ];
+
+    dontUnpack = true;
+
     installPhase = ''
-      cp $src $out
+      runHook preInstall
+
+      mkdir -p $out/bin
+      mkdir -p $out/etc/hexnode_agent
+
+      cp $src $out/bin/hexnode_agent
+
+      chmod +x $out/bin/hexnode_agent
+      runHook postInstall
     '';
-    
+
     meta = with lib; {
       description = "Hexnode agent for NixOS";
-      license = licenses.mit;
-      maintainers = [ marcjmiller ];
+      license = licenses.unfree;
+      maintainers = with maintainers; [ marcjmiller ];
     };
   };
 in
 buildFHSEnv {
   name = "ha-bash";
-  targetPkgs = pkgs: [ openssh ];
 
-  extraInstallCommands = ''
-    ln -s ${hexnode}/hexnode_agent $out/bin/
-  '';
+  targetPkgs = _pkgs: [
+    glib
+    glibc
+    hexnode
+    openssh
+  ];
 
   runScript = "bash";
 }

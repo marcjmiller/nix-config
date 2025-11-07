@@ -110,6 +110,10 @@ with lib;
     ".config/hypr/pyprland.toml" = {
       source = ./files/pyprland.toml;
     };
+    ".config/binaries" = {
+      source = ./files/binaries;
+      recursive = true;
+    };
     "Pictures/Wallpapers" = {
       source = ./files/wallpapers;
       recursive = true;
@@ -168,6 +172,7 @@ with lib;
 
     nixvim = {
       enable = true;
+      plugins.lualine.enable = true;
     };
 
     tealdeer = {

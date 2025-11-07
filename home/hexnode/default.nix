@@ -1,64 +1,46 @@
 {
-  stdenv,
+  config,
   lib,
-  autoPatchelfHook,
-  buildFHSEnv,
-  dbus,
-  openssh,
-  glib,
-  glibc,
-  gobject-introspection,
-  zlib,
+  pkgs,
   ...
 }:
+with lib;
 let
-  hexnode = stdenv.mkDerivation {
-    pname = "hexnode-agent";
-    version = "1.0.0";
+  cfg = config.services.hexnode;
+  hexnodePkg = pkgs.callPackage ./hexnode.nix { };
+in
+{
+  options.services.hexnode = {
+    enable = mkEnableOption "Hexnode MDM Agent";
+  };
 
-    src = /opt/hexnode/hexnode_agent;
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ hexnodePkg ];
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+    environment.etc."hexnode_agent" = {
+      source = "/var/lib/hexnode_agent";
+    };
 
-    buildInputs = [
-      openssh
-      dbus
-      glib
-      glibc
-      gobject-introspection
-      zlib
-    ];
-
-    dontUnpack = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/bin
-      mkdir -p $out/etc/hexnode_agent
-
-      cp $src $out/bin/hexnode_agent
-
-      chmod +x $out/bin/hexnode_agent
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Hexnode agent for NixOS";
-      license = licenses.unfree;
-      maintainers = with maintainers; [ marcjmiller ];
+    systemd.services.hexnode_agent = {
+      description = "Hexnode Linux Agent Service";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${hexnodePkg}/usr/local/bin/hexnode_agent";
+        StandardOutput = "journal";
+        StandardError = "journal";
+        SyslogIdentifier = "hexnode_agent";
+        Restart = "always";
+        RestartSec = "5s";
+        User = "root";
+        Group = "root";
+      };
+      preStart = ''
+        if [ ! -f /var/lib/hexnode_agent/config.enc ];
+        then
+          cp -r ${hexnodePkg}/etc/hexnode_agent/. /var/lib/hexnode_agent/
+        fi
+      '';
     };
   };
-in
-buildFHSEnv {
-  name = "ha-bash";
-
-  targetPkgs = _pkgs: [
-    glib
-    glibc
-    hexnode
-    openssh
-  ];
-
-  runScript = "bash";
 }

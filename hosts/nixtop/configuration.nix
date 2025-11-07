@@ -8,9 +8,9 @@
     ./hardware-configuration.nix
     ./disko-config.nix
     ../../home/falcon.nix
-    ../../home/hexnode.nix
+    ../../home/hexnode
   ];
-
+  
   networking = {
     firewall = {
       enable = true;
@@ -53,6 +53,8 @@
   };
 
   services = {
+    hexnode.enable = true;
+    
     ollama = {
       enable = true;
       acceleration = "cuda";

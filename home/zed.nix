@@ -29,14 +29,16 @@
       vim_mode = lib.mkForce false;
     };
     extensions = lib.mkForce [
-      "nix"
       "catppuccin"
       "catppuccin-icons"
-      "toml"
-      "dockerfile"
+      "crates-lsp"
       "docker compose"
+      "dockerfile"
       "git firefly"
+      "make"
+      "nix"
       "rust-src"
+      "toml"
     ];
   };
 }

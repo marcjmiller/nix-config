@@ -55,6 +55,7 @@ with lib;
     fzf
     gcc
     gimp
+    gnumake
     go
     httpie
     httpie-desktop
@@ -68,6 +69,7 @@ with lib;
     noto-fonts
     openssl
     papirus-icon-theme
+    prettier
     psmisc
     pkgs-stable.pulumi-bin
     inputs.pyprland.packages.${pkgs.system}.default
